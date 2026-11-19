@@ -3,51 +3,186 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SGD · Sistema de Gerenciamento de Demandas</title>
+<script>try{var t=localStorage.getItem("sgd-theme")}catch(e){}document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--purple:#6e20d4;--violet:#8c35ed;--deep:#260047;--ink:#221532;--muted:#776b88;--line:#e9e2f2;--bg:#f7f4fb;--white:#fff;--shadow:0 12px 32px #32104b0c}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",sans-serif}button,input,select,textarea{font:inherit}button{border:0;border-radius:11px;padding:11px 15px;background:var(--purple);color:#fff;font-weight:700;cursor:pointer;transition:.18s}button:hover{transform:translateY(-1px);filter:brightness(1.05)}button:disabled{opacity:.55;cursor:wait;transform:none}.btn-soft{background:#f0e7fb;color:#5d1cae}.btn-white{background:white;color:var(--purple);border:1px solid #e7d9fa}.btn-danger{background:#fff0f1;color:#b42336}.btn-small{padding:7px 10px;font-size:12px}.wrap{max-width:1400px;margin:auto;padding:24px}.login-shell{min-height:100vh;display:grid;grid-template-columns:1.15fr .85fr;background:#16002d}.login-art{background:linear-gradient(130deg,#1b002fdd,#270050a6),url("assets/onevoice-background.png") center/cover;display:flex;align-items:flex-end;padding:clamp(25px,5vw,70px);min-height:100vh;color:white}.art-copy{max-width:570px}.art-copy .eyebrow{letter-spacing:.2em;text-transform:uppercase;font-size:12px;color:#e4c8ff}.art-copy h1{font:800 clamp(35px,5vw,65px) Manrope;margin:12px 0}.art-copy p{color:#eadcff;font-size:17px;max-width:480px}.login-side{display:flex;align-items:center;justify-content:center;padding:35px;background:#fff}.login-card{width:min(430px,100%)}.logo{width:70px;height:70px;object-fit:contain;margin-bottom:20px}.login-card h2{font:800 30px Manrope;margin:0}.login-card p{color:var(--muted)}.google-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;background:white;color:#30243c;border:1px solid #e5dfea;padding:14px;margin:22px 0}.google-g{font-weight:900;font-size:20px;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 25% 50%,#fbbc05 50% 75%,#ea4335 75%);background-clip:text;color:transparent}.tiny{font-size:12px;color:var(--muted)}.hidden{display:none!important}
-.app-header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:12px}.brand-logo{width:47px;height:47px;object-fit:contain;background:white;border-radius:12px;padding:5px}.brand-title{font:800 20px Manrope}.brand-sub{font-size:12px;color:var(--muted)}.profile{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}.avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#eee}.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.nav button{background:#eee7f5;color:#68547f}.nav button.active{background:var(--purple);color:white}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:21px;box-shadow:var(--shadow);margin-bottom:17px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}.panel-head h2{font:700 19px Manrope;margin:0}.subtle{font-size:12px;color:var(--muted)}.form-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.field{grid-column:span 6}.field.third{grid-column:span 4}.field.full{grid-column:span 12}.field label{display:block;font-weight:700;font-size:13px;margin-bottom:6px}.required{color:#a63ae0}.field input,.field select,.field textarea,.filters input,.filters select{width:100%;border:1px solid #ddd3e9;border-radius:11px;padding:11px 12px;background:#fff;outline:none;color:var(--ink)}.field textarea{min-height:105px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#9b61e7;box-shadow:0 0 0 3px #eadbff}.field .help{font-size:11px;color:var(--muted);margin-top:5px}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:17px}.suggest-wrap{position:relative}.suggest-list{position:absolute;z-index:10;top:100%;left:0;right:0;background:white;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 25px #20103020;max-height:210px;overflow:auto}.suggest-list button{display:block;width:100%;background:white;color:var(--ink);text-align:left;border-radius:0;padding:10px 12px}.suggest-list button:hover{background:#f5effb}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:17px}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px;box-shadow:var(--shadow)}.stat-label{font-size:12px;color:var(--muted)}.stat-value{font:800 27px Manrope;margin-top:5px}.stat-icon{float:right;width:32px;height:32px;border-radius:10px;background:#f1e5ff;color:var(--purple);display:grid;place-items:center;font-weight:800}.charts{display:grid;grid-template-columns:1fr 1fr;gap:14px}.chart-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px}.chart-card h3{font:700 14px Manrope;margin:0 0 10px}.chart-card canvas{width:100%;height:210px}.filters{display:grid;grid-template-columns:2fr repeat(3,1fr) 1fr 1fr;gap:9px;margin-bottom:12px}.table-scroll{overflow:auto;border:1px solid var(--line);border-radius:12px}table{border-collapse:collapse;width:100%;min-width:880px}th,td{padding:12px;text-align:left;border-bottom:1px solid #f0eaf5;vertical-align:top}th{background:#fbf9fd;color:#766986;font-size:11px;text-transform:uppercase;letter-spacing:.04em}td{font-size:13px}td .title-cell{font-weight:700}.tag{display:inline-block;background:#f0e6fc;color:#6721b6;border-radius:50px;padding:4px 8px;font-size:11px;font-weight:700}.actions{display:flex;gap:5px}.actions button{padding:6px 8px;font-size:11px}.table-bottom{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px}.export{display:flex;gap:7px;flex-wrap:wrap}.admin-list{display:grid;gap:8px}.admin-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border-bottom:1px solid var(--line)}.modal{position:fixed;inset:0;background:#19002c99;display:grid;place-items:center;padding:18px;z-index:30}.modal-box{width:min(650px,100%);max-height:90vh;overflow:auto;background:white;border-radius:18px;padding:22px}.modal-box h2{font:700 19px Manrope;margin:0 0 15px}.toast{position:fixed;bottom:22px;right:22px;background:#2b1241;color:white;padding:13px 17px;border-radius:12px;box-shadow:0 12px 30px #18002c33;z-index:100;max-width:350px}.empty{padding:35px;text-align:center;color:var(--muted)}.print-title{display:none}
-@media(max-width:950px){.login-shell{grid-template-columns:1fr}.login-art{min-height:38vh;padding:25px}.login-side{min-height:62vh}.filters{grid-template-columns:repeat(3,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:650px){.wrap{padding:13px}.app-header{align-items:flex-start}.profile{max-width:45%;flex-wrap:wrap;justify-content:flex-end}.brand-title{font-size:17px}.panel{padding:15px}.field,.field.third{grid-column:span 12}.filters{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}.form-actions{justify-content:stretch}.form-actions button{flex:1}.login-art{min-height:31vh}.art-copy h1{font-size:35px}.login-side{padding:25px}.stats{gap:8px}.stat{padding:12px}.stat-value{font-size:23px}}
-@media print{body{background:white}.wrap{max-width:none;padding:0}.app-header,.nav,.filters,.export,.actions,.form-actions,.profile,.stats,.charts{display:none!important}.panel{box-shadow:none;border:0;padding:0}.print-title{display:block}table{min-width:0}th,td{padding:7px;font-size:10pt}}
+:root{color-scheme:light;--bg:#f5f6f8;--s:#fff;--s2:#f0f1f5;--line:#e2e5ec;--ink:#151822;--mut:#5f677a;--ac:#6a31d6;--ac-soft:#efe8fd;--ac-text:#5522b8;--dg:#b4233a;--shadow:0 1px 2px #10142010,0 4px 14px #1014200a;--side:#1c1133;--side-ink:#cfc6e4;--side-act:#ffffff1f;--ov:#12082499}
+html[data-theme=dark]{color-scheme:dark;--bg:#0e1016;--s:#161922;--s2:#1d212c;--line:#282d3b;--ink:#e9ebf2;--mut:#9aa2b5;--ac:#8458ec;--ac-soft:#272043;--ac-text:#c3acff;--dg:#ff8a9b;--shadow:0 1px 2px #0008;--side:#120c20;--side-ink:#b9b0d0;--ov:#000000b3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 "Hanken Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.hidden{display:none!important}.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:8px;padding:9px 15px;font-weight:600;font-size:14px;background:var(--ac);color:#fff;cursor:pointer;transition:background .15s,opacity .15s}
+.btn:hover{opacity:.9}.btn:disabled{opacity:.55;cursor:wait}
+.btn.sec{background:var(--s);color:var(--ink);border-color:var(--line)}.btn.sec:hover{background:var(--s2);opacity:1}
+.btn.ghost{background:transparent;color:var(--ac-text)}.btn.ghost:hover{background:var(--ac-soft);opacity:1}
+.btn.dg{background:transparent;color:var(--dg)}.btn.dg:hover{background:var(--s2);opacity:1}
+.btn.sm{padding:6px 10px;font-size:13px}
+.muted{color:var(--mut)}.small{font-size:13px}
+/* login */
+.login{min-height:100vh;display:grid;grid-template-columns:1.1fr .9fr;background:var(--bg)}
+.l-art{position:relative;display:flex;align-items:flex-end;padding:clamp(28px,5vw,72px);color:#fff;background:linear-gradient(160deg,#2a0b55,#12082a);overflow:hidden}
+.l-art::before{content:"";position:absolute;inset:0;background:linear-gradient(150deg,#1b0638d9,#2d0a5c80),url("assets/onevoice-background.png") center/cover}
+.l-art div{position:relative;max-width:540px}
+.l-art h1{font-size:clamp(34px,4.6vw,56px);line-height:1.05;font-weight:800;letter-spacing:-.02em;margin:10px 0 14px}
+.l-art p{color:#e6dcfa;font-size:17px;max-width:460px}.l-art small{color:#d5c3f5;font-size:14px;font-weight:500}
+.l-side{display:flex;align-items:center;justify-content:center;padding:32px;position:relative}
+.l-side .tbtn{position:absolute;top:18px;right:18px}
+.l-card{width:min(400px,100%)}.l-card .logo{width:60px;height:60px;object-fit:contain;margin-bottom:22px}
+.l-card h2{font-size:28px;font-weight:800;letter-spacing:-.02em;margin:4px 0 6px}
+.g-btn{width:100%;margin:24px 0 12px;padding:12px}
+.g-btn b{font-weight:800;font-size:18px;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 0 50%,#fbbc05 0 75%,#ea4335 0);-webkit-background-clip:text;background-clip:text;color:transparent}
+#loginMessage{min-height:20px;color:var(--dg);font-size:13px}
+/* shell */
+.shell{display:grid;grid-template-columns:252px 1fr;min-height:100vh}
+.side{background:var(--side);color:var(--side-ink);padding:20px 14px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:11px;padding:0 6px}
+.brand img{width:40px;height:40px;object-fit:contain;background:#fff;border-radius:10px;padding:4px}
+.brand b{display:block;color:#fff;font-size:17px;font-weight:800;line-height:1.1}.brand span{font-size:12px;line-height:1.2;display:block;margin-top:2px}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav button{display:flex;align-items:center;gap:11px;width:100%;border:0;background:none;color:inherit;padding:10px 12px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;text-align:left}
+.nav button:hover{background:#ffffff10}.nav button.active{background:var(--side-act);color:#fff}
+.me{margin-top:auto;display:flex;flex-direction:column;gap:12px;border-top:1px solid #ffffff1a;padding-top:14px}
+.who{display:flex;align-items:center;gap:10px;padding:0 6px;min-width:0}
+.who img{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#ffffff22}
+.who span{font-size:13px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me-actions{display:flex;gap:8px}
+.me .btn{background:#ffffff14;color:#fff;border-color:transparent}.me .btn:hover{background:#ffffff26;opacity:1}.me .btn.out{flex:1}
+.tbtn{width:38px;height:38px;padding:0}
+.tbtn .moon{display:none}html[data-theme=dark] .tbtn .moon{display:block}html[data-theme=dark] .tbtn .sun{display:none}
+.l-side .tbtn{background:var(--s);color:var(--ink);border:1px solid var(--line)}
+main{padding:32px clamp(18px,3.5vw,48px) 48px;min-width:0;max-width:1320px;width:100%}
+.ph{margin-bottom:22px}.ph h1{font-size:26px;font-weight:800;letter-spacing:-.02em}.ph p{color:var(--mut);margin-top:3px}
+.panel{background:var(--s);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:22px;margin-bottom:18px}
+.p-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.p-head h2{font-size:17px;font-weight:700}
+/* form */
+.form-panel{max-width:920px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.f{grid-column:span 6}.f.t{grid-column:span 4}.f.full{grid-column:span 12}
+.f label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}.req{color:var(--ac-text)}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--s);outline:none;transition:border-color .15s,box-shadow .15s}
+input::placeholder,textarea::placeholder{color:var(--mut);opacity:.8}
+input:focus,select:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--ac-soft)}
+textarea{min-height:104px;resize:vertical}
+.help{font-size:12px;color:var(--mut);margin-top:5px}
+.actions-row{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.sw{position:relative}.sug{position:absolute;z-index:20;top:calc(100% + 4px);left:0;right:0;background:var(--s);border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 28px #0000002e;max-height:220px;overflow:auto;padding:4px}
+.sug button{display:block;width:100%;background:none;border:0;border-radius:6px;padding:8px 10px;text-align:left;cursor:pointer;font-size:14px}.sug button:hover{background:var(--ac-soft)}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--s);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);margin-bottom:18px}
+.stat{padding:18px 22px;border-left:1px solid var(--line)}.stat:first-child{border-left:0}
+.stat span{display:block;font-size:13px;color:var(--mut)}.stat b{display:block;font-size:30px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:2px}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}.charts .panel{margin:0}
+.charts h3{font-size:15px;font-weight:700;margin-bottom:10px}.charts canvas{width:100%;height:210px;display:block}
+/* table */
+.filters{display:grid;grid-template-columns:2fr 1.2fr 1.2fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.search{position:relative}.search .i{position:absolute;left:11px;top:50%;margin-top:-9px;color:var(--mut)}.search input{padding-left:36px}
+.exp{display:flex;gap:8px;flex-wrap:wrap}
+.tw{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;font-size:14px}
+tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:var(--s2)}
+th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-space:nowrap}
+.nw{white-space:nowrap;font-variant-numeric:tabular-nums}.t1{font-weight:600}.t2{color:var(--mut);font-size:13px;margin-top:2px;max-width:520px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tag{display:inline-block;background:var(--ac-soft);color:var(--ac-text);border-radius:6px;padding:2px 9px;font-size:12.5px;font-weight:600}
+.row-act{display:flex;gap:2px;justify-content:flex-end}
+.empty{padding:36px 16px;text-align:center;color:var(--mut)}
+.t-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px}
+.admin-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line)}.admin-row:last-child{border-bottom:0}
+.add-row{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap}.add-row input{max-width:360px}
+/* modal / toast */
+.modal{position:fixed;inset:0;background:var(--ov);display:grid;place-items:center;padding:18px;z-index:40}
+.mbox{width:min(660px,100%);max-height:92vh;overflow:auto;background:var(--s);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 24px 60px #0006}
+.mbox h2{font-size:19px;font-weight:700;margin-bottom:16px}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:var(--bg);padding:12px 16px;border-radius:10px;box-shadow:0 12px 30px #0004;z-index:100;max-width:350px;font-size:14px;font-weight:500}
+@media(max-width:950px){.login{grid-template-columns:1fr}.l-art{min-height:34vh}
+.shell{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 14px}
+.nav{flex-direction:row;order:3;width:100%;overflow:auto}.nav button{width:auto;white-space:nowrap}
+.me{margin:0 0 0 auto;border:0;padding:0;flex-direction:row;align-items:center}.who span{display:none}
+.stats{grid-template-columns:1fr 1fr}.stat:nth-child(3){border-left:0}.stat:nth-child(n+3){border-top:1px solid var(--line)}
+.filters{grid-template-columns:1fr 1fr 1fr}.search{grid-column:span 3}.charts{grid-template-columns:1fr}}
+@media(max-width:620px){main{padding-top:20px}.f,.f.t{grid-column:span 12}.panel{padding:16px}.filters{grid-template-columns:1fr 1fr}.search{grid-column:span 2}.actions-row .btn{flex:1}.stat{padding:14px}.stat b{font-size:25px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{html,html[data-theme=dark]{--bg:#fff;--s:#fff;--s2:#fff;--ink:#000;--mut:#444;--line:#bbb;--ac-soft:#fff;--ac-text:#000}
+.side,.filters,.exp,.row-act,.actions-row,.stats,.charts,.t-foot .btn,.ph p,.th-act,.td-act{display:none!important}.shell{display:block}main{padding:0;max-width:none}.panel{box-shadow:none;border:0;padding:0}table{min-width:0}th,td{padding:6px;font-size:10pt}.tag{padding:0}}
 </style>
 </head>
 <body>
-<section id="loginView" class="login-shell">
- <div class="login-art"><div class="art-copy"><div class="eyebrow">Missão Mineira Oeste · OneVoice</div><h1>Organizar para<br>avançar juntos.</h1><p>Um espaço único para registrar, acompanhar e transformar demandas concluídas em informação.</p></div></div>
- <div class="login-side"><div class="login-card"><img class="logo" src="assets/logo-mmo.png" alt="Logo Missão Mineira Oeste"><div class="tiny">SGD · SISTEMA DE GERENCIAMENTO DE DEMANDAS</div><h2>Bem-vindo.</h2><p>Entre com sua conta Google autorizada para acessar o sistema.</p><button class="google-btn" id="googleLogin"><span class="google-g">G</span> Entrar com Google</button><div id="loginMessage" class="tiny"></div><p class="tiny">O acesso é restrito aos e-mails previamente autorizados pela administração.</p></div></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></symbol>
+<symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
+</defs></svg>
+
+<section id="loginView" class="login">
+ <div class="l-art"><div><small>Missão Mineira Oeste · OneVoice</small><h1>Organizar para avançar juntos.</h1><p>Um espaço único para registrar, acompanhar e transformar demandas concluídas em informação.</p></div></div>
+ <div class="l-side"><button class="btn tbtn theme-btn" aria-label="Alternar tema"><svg class="i sun"><use href="#i-sun"/></svg><svg class="i moon"><use href="#i-moon"/></svg></button>
+  <div class="l-card"><img class="logo" src="assets/logo-mmo.png" alt="Missão Mineira Oeste"><div class="small muted">Sistema de Gerenciamento de Demandas</div><h2>Bem-vindo</h2><p class="muted">Entre com sua conta Google autorizada para acessar o sistema.</p>
+  <button class="btn sec g-btn" id="googleLogin"><b>G</b> Entrar com Google</button><div id="loginMessage" role="status"></div><p class="small muted">O acesso é restrito aos e-mails autorizados pela administração.</p></div></div>
 </section>
-<div id="mainView" class="hidden">
-<div class="wrap">
-<header class="app-header"><div class="brand"><img class="brand-logo" src="assets/logo-mmo.png" alt=""><div><div class="brand-title">SGD</div><div class="brand-sub">Sistema de Gerenciamento de Demandas</div></div></div><div class="profile"><img id="profilePhoto" class="avatar" src="" alt=""><span id="profileName"></span><button class="btn-soft btn-small" id="logout">Sair</button></div></header>
-<nav class="nav"><button class="active" data-view="newView">＋ Registrar</button><button data-view="dashboardView">▦ Painel & registros</button><button id="adminNav" class="hidden" data-view="adminView">⚙ Administração</button></nav>
+
+<div id="mainView" class="shell hidden">
+<aside class="side">
+ <div class="brand"><img src="assets/logo-mmo.png" alt=""><div><b>SGD</b><span>Gerenciamento de Demandas</span></div></div>
+ <nav class="nav">
+  <button class="active" data-view="newView"><svg class="i"><use href="#i-plus"/></svg>Registrar demanda</button>
+  <button data-view="dashboardView"><svg class="i"><use href="#i-grid"/></svg>Painel e registros</button>
+  <button id="adminNav" class="hidden" data-view="adminView"><svg class="i"><use href="#i-gear"/></svg>Administração</button>
+ </nav>
+ <div class="me">
+  <div class="who"><img id="profilePhoto" src="" alt=""><span id="profileName"></span></div>
+  <div class="me-actions"><button class="btn tbtn theme-btn" aria-label="Alternar tema"><svg class="i sun"><use href="#i-sun"/></svg><svg class="i moon"><use href="#i-moon"/></svg></button><button class="btn sm out" id="logout"><svg class="i"><use href="#i-out"/></svg>Sair</button></div>
+ </div>
+</aside>
+<main>
 <section id="newView" class="view">
-<div class="panel"><div class="panel-head"><h2>Registrar demanda concluída</h2><span class="tag">Novo registro</span></div>
-<form id="demandForm"><div class="form-grid">
-<div class="field full"><label>Nome da demanda <span class="required">*</span></label><div class="suggest-wrap"><input id="demandName" required autocomplete="off" placeholder="Ex.: Arte para divulgação, cobertura fotográfica..."><div id="nameSuggest" class="suggest-list hidden"></div></div><div class="help">Obrigatório. Sugestões baseadas em registros anteriores; você pode cadastrar um nome novo.</div></div>
-<div class="field full"><label>Descrição detalhada <span class="subtle">(opcional)</span></label><textarea id="detail" placeholder="Contexto, entregas, observações adicionais..."></textarea></div>
-<div class="field third"><label>Responsável <span class="required">*</span></label><select id="responsible" required><option value="">Selecione na lista</option></select><div class="help">Somente nomes cadastrados.</div></div>
-<div class="field third"><label>Data de realização <span class="required">*</span></label><input id="date" type="date" required></div>
-<div class="field third"><label>Departamento <span class="required">*</span></label><div class="suggest-wrap"><input id="department" required autocomplete="off" placeholder="Digite o departamento"><div id="deptSuggest" class="suggest-list hidden"></div></div></div>
-<div class="field"><label>Categoria <span class="required">*</span></label><div class="suggest-wrap"><input id="category" required autocomplete="off" placeholder="Ex.: Comunicação, evento, administrativo"><div id="categorySuggest" class="suggest-list hidden"></div></div></div>
-<div class="field"><label>Prioridade <span class="required">*</span></label><select id="priority" required><option value="">Selecione</option><option>Baixa</option><option>Normal</option><option>Alta</option><option>Urgente</option></select></div>
-</div><div class="form-actions"><button type="reset" class="btn-soft">Limpar formulário</button><button id="saveDemand" type="submit">Salvar demanda</button></div></form></div></section>
+ <div class="ph"><h1>Registrar demanda</h1><p>Cadastre uma demanda que já foi concluída.</p></div>
+ <div class="panel form-panel"><form id="demandForm"><div class="grid">
+  <div class="f full"><label for="demandName">Nome da demanda <span class="req">*</span></label><div class="sw"><input id="demandName" required autocomplete="off" placeholder="Ex.: Arte para divulgação, cobertura fotográfica"><div id="nameSuggest" class="sug hidden"></div></div><div class="help">Sugerimos nomes de registros anteriores, mas você pode cadastrar um nome novo.</div></div>
+  <div class="f full"><label for="detail">Descrição <span class="muted">(opcional)</span></label><textarea id="detail" placeholder="Contexto, entregas e observações"></textarea></div>
+  <div class="f t"><label for="responsible">Responsável <span class="req">*</span></label><select id="responsible" required><option value="">Selecione</option></select></div>
+  <div class="f t"><label for="date">Data de realização <span class="req">*</span></label><input id="date" type="date" required></div>
+  <div class="f t"><label for="department">Departamento <span class="req">*</span></label><div class="sw"><input id="department" required autocomplete="off" placeholder="Digite ou escolha"><div id="deptSuggest" class="sug hidden"></div></div></div>
+ </div><div class="actions-row"><button type="reset" class="btn sec">Limpar</button><button id="saveDemand" type="submit" class="btn">Salvar demanda</button></div></form></div>
+</section>
+
 <section id="dashboardView" class="view hidden">
-<div class="stats"><div class="stat"><span class="stat-icon">▤</span><div class="stat-label">Total de demandas</div><div id="statTotal" class="stat-value">0</div></div><div class="stat"><span class="stat-icon">◷</span><div class="stat-label">Este mês</div><div id="statMonth" class="stat-value">0</div></div><div class="stat"><span class="stat-icon">⌘</span><div class="stat-label">Departamentos</div><div id="statDepartments" class="stat-value">0</div></div><div class="stat"><span class="stat-icon">♙</span><div class="stat-label">Responsáveis ativos</div><div id="statPeople" class="stat-value">0</div></div></div>
-<div class="charts"><div class="chart-card"><h3>Demandas por departamento</h3><canvas id="deptChart"></canvas></div><div class="chart-card"><h3>Demandas por mês · últimos 6 meses</h3><canvas id="monthChart"></canvas></div></div>
-<div class="panel" style="margin-top:15px"><div class="panel-head"><h2>Registros</h2><div class="export"><button class="btn-soft" id="xlsxExport">Excel (.xlsx)</button><button class="btn-soft" id="csvExport">CSV</button><button class="btn-soft" id="pdfExport">PDF / Imprimir</button></div></div>
-<div class="filters"><input id="search" placeholder="Pesquisar demanda ou descrição..."><select id="filterResponsible"><option value="">Todos responsáveis</option></select><select id="filterDept"><option value="">Todos departamentos</option></select><select id="filterCategory"><option value="">Todas categorias</option></select><input id="filterFrom" type="date" title="De"><input id="filterTo" type="date" title="Até"></div>
-<div class="table-scroll"><table><thead><tr><th>Data</th><th>Demanda</th><th>Responsável</th><th>Departamento</th><th>Categoria</th><th>Prioridade</th><th>Descrição</th><th>Ações</th></tr></thead><tbody id="tableBody"></tbody></table></div><div class="table-bottom"><span id="countLabel" class="subtle"></span><button class="btn-soft btn-small" id="clearFilters">Limpar filtros</button></div></div>
+ <div class="ph"><h1>Painel e registros</h1><p>Visão geral das demandas concluídas.</p></div>
+ <div class="stats"><div class="stat"><span>Total de demandas</span><b id="statTotal">0</b></div><div class="stat"><span>Este mês</span><b id="statMonth">0</b></div><div class="stat"><span>Departamentos</span><b id="statDepartments">0</b></div><div class="stat"><span>Responsáveis ativos</span><b id="statPeople">0</b></div></div>
+ <div class="charts"><div class="panel"><h3>Demandas por departamento</h3><canvas id="deptChart"></canvas></div><div class="panel"><h3>Demandas por mês (últimos 6)</h3><canvas id="monthChart"></canvas></div></div>
+ <div class="panel"><div class="p-head"><h2>Registros</h2><div class="exp"><button class="btn sec sm" id="xlsxExport"><svg class="i"><use href="#i-dl"/></svg>Excel</button><button class="btn sec sm" id="csvExport"><svg class="i"><use href="#i-dl"/></svg>CSV</button><button class="btn sec sm" id="pdfExport"><svg class="i"><use href="#i-dl"/></svg>PDF / Imprimir</button></div></div>
+ <div class="filters"><div class="search"><svg class="i"><use href="#i-search"/></svg><input id="search" placeholder="Pesquisar demanda ou descrição" aria-label="Pesquisar"></div><select id="filterResponsible" aria-label="Responsável"><option value="">Todos os responsáveis</option></select><select id="filterDept" aria-label="Departamento"><option value="">Todos os departamentos</option></select><input id="filterFrom" type="date" title="De" aria-label="De"><input id="filterTo" type="date" title="Até" aria-label="Até"></div>
+ <div class="tw"><table><thead><tr><th>Data</th><th>Demanda</th><th>Responsável</th><th>Departamento</th><th class="th-act"></th></tr></thead><tbody id="tableBody"></tbody></table></div>
+ <div class="t-foot"><span id="countLabel" class="small muted"></span><button class="btn ghost sm" id="clearFilters">Limpar filtros</button></div></div>
 </section>
+
 <section id="adminView" class="view hidden">
-<div class="panel"><div class="panel-head"><h2>Responsáveis cadastrados</h2><span class="tag">Administração</span></div><div class="subtle">Gerencie a lista de responsáveis. Os nomes desativados permanecem nos registros históricos.</div><div class="row" style="margin:14px 0"><input id="newPerson" placeholder="Nome completo" style="max-width:380px"><button id="addPerson">Adicionar responsável</button></div><div id="peopleList" class="admin-list"></div></div>
-<div class="panel"><div class="panel-head"><h2>Lista de departamentos</h2></div><div id="deptAdminList" class="admin-list"></div></div>
-<div class="panel"><div class="panel-head"><h2>Histórico recente de alterações</h2></div><div id="auditList" class="admin-list"></div></div>
+ <div class="ph"><h1>Administração</h1><p>Responsáveis, departamentos e histórico de alterações.</p></div>
+ <div class="panel"><div class="p-head"><h2>Responsáveis</h2></div><div class="small muted">Os nomes desativados continuam aparecendo nos registros antigos.</div><div class="add-row"><input id="newPerson" placeholder="Nome completo" aria-label="Nome do responsável"><button class="btn" id="addPerson">Adicionar</button></div><div id="peopleList"></div></div>
+ <div class="panel"><div class="p-head"><h2>Departamentos</h2></div><div id="deptAdminList"></div></div>
+ <div class="panel"><div class="p-head"><h2>Últimas alterações</h2></div><div id="auditList"></div></div>
 </section>
-</div></div>
-<div id="editModal" class="modal hidden"><div class="modal-box"><h2>Editar registro</h2><form id="editForm"><input id="editId" type="hidden"><div class="form-grid"><div class="field full"><label>Nome da demanda *</label><input id="editName" required></div><div class="field full"><label>Descrição detalhada</label><textarea id="editDetail"></textarea></div><div class="field"><label>Responsável *</label><select id="editResponsible" required></select></div><div class="field"><label>Data *</label><input id="editDate" type="date" required></div><div class="field"><label>Departamento *</label><input id="editDepartment" required></div><div class="field"><label>Categoria *</label><input id="editCategory" required></div><div class="field"><label>Prioridade *</label><select id="editPriority" required><option>Baixa</option><option>Normal</option><option>Alta</option><option>Urgente</option></select></div></div><div class="form-actions"><button type="button" class="btn-soft" id="cancelEdit">Cancelar</button><button>Salvar mudanças</button></div></form></div></div>
+</main></div>
+
+<div id="editModal" class="modal hidden"><div class="mbox"><h2>Editar registro</h2><form id="editForm"><input id="editId" type="hidden"><div class="grid">
+ <div class="f full"><label>Nome da demanda <span class="req">*</span></label><input id="editName" required></div>
+ <div class="f full"><label>Descrição</label><textarea id="editDetail"></textarea></div>
+ <div class="f t"><label>Responsável <span class="req">*</span></label><select id="editResponsible" required></select></div>
+ <div class="f t"><label>Data <span class="req">*</span></label><input id="editDate" type="date" required></div>
+ <div class="f t"><label>Departamento <span class="req">*</span></label><div class="sw"><input id="editDepartment" required autocomplete="off"><div id="editDeptSuggest" class="sug hidden"></div></div></div>
+ </div><div class="actions-row"><button type="button" class="btn sec" id="cancelEdit">Cancelar</button><button class="btn">Salvar alterações</button></div></form></div></div>
+
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -63,42 +198,75 @@ const firebaseConfig = {
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),provider=new GoogleAuthProvider();
 provider.setCustomParameters({prompt:"select_account"});
 const $=id=>document.getElementById(id),C=n=>collection(db,n),D=(c,id)=>doc(db,c,id),norm=s=>String(s||"").trim().replace(/\s+/g," ").toLocaleLowerCase("pt-BR"),clean=s=>String(s||"").trim().replace(/\s+/g," ");
-let user=null,admin=false,demands=[],people=[],depts=[],cats=[],audit=[];
-const loginView=$("loginView"),mainView=$("mainView");
+const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=d=>d?d.split("-").reverse().join("/"):"—",today=()=>new Date().toLocaleDateString("en-CA"),byName=(a,b)=>a.localeCompare(b,"pt-BR");
+let user=null,admin=false,demands=[],people=[],depts=[],audit=[];
 function toast(s){let el=document.createElement("div");el.className="toast";el.textContent=s;document.body.append(el);setTimeout(()=>el.remove(),3800)}
-function today(){return new Date().toLocaleDateString("en-CA")}
+
+/* tema */
+const root=document.documentElement,viewing=id=>!$(id).classList.contains("hidden");
+function setTheme(t){root.dataset.theme=t;try{localStorage.setItem("sgd-theme",t)}catch(e){}if(viewing("dashboardView"))renderDashboard()}
+document.querySelectorAll(".theme-btn").forEach(b=>b.onclick=()=>setTheme(root.dataset.theme==="dark"?"light":"dark"));
+
+/* acesso */
 $("date").value=today();
-$("googleLogin").onclick=async()=>{try{$("loginMessage").textContent="Abrindo autenticação Google…";await signInWithPopup(auth,provider)}catch(e){$("loginMessage").textContent="Falha no login: "+e.message}};
+$("googleLogin").onclick=async()=>{try{$("loginMessage").textContent="";await signInWithPopup(auth,provider)}catch(e){$("loginMessage").textContent="Não foi possível entrar: "+e.message}};
 $("logout").onclick=()=>signOut(auth);
-onAuthStateChanged(auth,async u=>{if(!u){loginView.classList.remove("hidden");mainView.classList.add("hidden");return}user=u;try{let allow=await getDoc(D("allowlist",u.email.toLowerCase()));if(!allow.exists()||allow.data().active===false){await signOut(auth);$("loginMessage").textContent="Este e-mail não está autorizado. Solicite acesso ao administrador.";return}admin=allow.data().role==="admin";loginView.classList.add("hidden");mainView.classList.remove("hidden");$("profileName").textContent=u.displayName||u.email;$("profilePhoto").src=u.photoURL||"";$("adminNav").classList.toggle("hidden",!admin);await loadAll()}catch(e){toast("Não foi possível verificar acesso: "+e.message);await signOut(auth)}});
-async function loadAll(){try{const [ds,ps,dep,cat,as]=await Promise.all([getDocs(query(C("demands"),orderBy("date","desc"))),getDocs(C("responsibles")),getDocs(C("departments")),getDocs(C("categories")),getDocs(query(C("audit"),orderBy("createdAt","desc")))]);demands=ds.docs.map(d=>({id:d.id,...d.data()}));people=ps.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.active!==false).sort((a,b)=>a.name.localeCompare(b.name,"pt-BR"));depts=dep.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.name.localeCompare(b.name,"pt-BR"));cats=cat.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.name.localeCompare(b.name,"pt-BR"));audit=as.docs.map(d=>({id:d.id,...d.data()}));fillSelectors();renderTable();renderDashboard();renderAdmin()}catch(e){toast("Erro ao carregar: "+e.message)}}
-function options(sel,arr,placeholder){let old=sel.value;sel.innerHTML=`<option value="">${placeholder}</option>`;arr.forEach(x=>{let o=document.createElement("option");o.value=x.name;o.textContent=x.name;sel.append(o)});if([...sel.options].some(o=>o.value===old))sel.value=old}
-function fillSelectors(){options($("responsible"),people,"Selecione um responsável");options($("editResponsible"),people,"Selecione um responsável");options($("filterResponsible"),people,"Todos responsáveis");options($("filterDept"),depts,"Todos departamentos");options($("filterCategory"),cats,"Todas categorias")}
-async function saveSuggestion(collectionName,value){value=clean(value);if(!value)return;let id=norm(value);const colList=collectionName==="departments"?depts:collectionName==="categories"?cats:[];if(!colList.some(x=>norm(x.name)===id)){await setDoc(D(collectionName,id),{name:value,createdBy:user.uid,createdAt:serverTimestamp()});colList.push({id,name:value});colList.sort((a,b)=>a.name.localeCompare(b.name,"pt-BR"));fillSelectors()}}
-function suggestions(input,list,arr){input.addEventListener("input",()=>{let v=norm(input.value),matches=arr.filter(x=>!v||norm(x.name).includes(v)).slice(0,8);list.innerHTML="";if(!matches.length){list.classList.add("hidden");return}matches.forEach(x=>{let b=document.createElement("button");b.type="button";b.textContent=x.name;b.onclick=()=>{input.value=x.name;list.classList.add("hidden")};list.append(b)});list.classList.remove("hidden")});input.addEventListener("blur",()=>setTimeout(()=>list.classList.add("hidden"),180));input.addEventListener("focus",()=>input.dispatchEvent(new Event("input")))}
-suggestions($("department"),$("deptSuggest"),depts);suggestions($("category"),$("categorySuggest"),cats);
-$("demandName").addEventListener("input",()=>{let v=norm($("demandName").value),matches=[...new Set(demands.map(x=>x.name).filter(Boolean))].filter(x=>!v||norm(x).includes(v)).slice(0,8),box=$("nameSuggest");box.innerHTML="";if(!matches.length){box.classList.add("hidden");return}matches.forEach(x=>{let b=document.createElement("button");b.type="button";b.textContent=x;b.onclick=()=>{$("demandName").value=x;box.classList.add("hidden")};box.append(b)});box.classList.remove("hidden")});
-$("demandName").addEventListener("blur",()=>setTimeout(()=>$("nameSuggest").classList.add("hidden"),180));
-$("demandForm").onsubmit=async e=>{e.preventDefault();let name=clean($("demandName").value),responsible=$("responsible").value,date=$("date").value,department=clean($("department").value),category=clean($("category").value),priority=$("priority").value;if(!name||!responsible||!date||!department||!category||!priority){toast("Preencha todos os campos obrigatórios.");return}let b=$("saveDemand");b.disabled=true;b.textContent="Salvando…";try{await saveSuggestion("departments",department);await saveSuggestion("categories",category);let data={name,detail:clean($("detail").value),responsible,date,department,category,priority,createdBy:user.uid,createdByEmail:user.email,createdByName:user.displayName||user.email,createdAt:serverTimestamp(),updatedAt:serverTimestamp()};let ref=await addDoc(C("demands"),data);await addAudit(ref.id,"Criou registro",data);toast("Demanda registrada com sucesso.");$("demandForm").reset();$("date").value=today();await loadAll()}catch(err){toast("Erro ao salvar: "+err.message)}finally{b.disabled=false;b.textContent="Salvar demanda"}};
-function getFiltered(){let s=norm($("search").value),p=$("filterResponsible").value,d=$("filterDept").value,c=$("filterCategory").value,f=$("filterFrom").value,t=$("filterTo").value;return demands.filter(x=>(!s||norm(x.name+" "+x.detail).includes(s))&&(!p||x.responsible===p)&&(!d||x.department===d)&&(!c||x.category===c)&&(!f||x.date>=f)&&(!t||x.date<=t))}
-["search","filterResponsible","filterDept","filterCategory","filterFrom","filterTo"].forEach(id=>$(id).addEventListener("input",renderTable));
-$("clearFilters").onclick=()=>{["search","filterResponsible","filterDept","filterCategory","filterFrom","filterTo"].forEach(id=>$(id).value="");renderTable()};
-function renderTable(){let list=getFiltered(),tb=$("tableBody");tb.innerHTML="";if(!list.length){tb.innerHTML='<tr><td colspan="8" class="empty">Nenhuma demanda encontrada com esses filtros.</td></tr>'}list.forEach(x=>{let tr=document.createElement("tr");const td=(text)=>{let el=document.createElement("td");el.textContent=text||"—";return el};let date=td(x.date),name=td("");name.innerHTML="";let title=document.createElement("div");title.className="title-cell";title.textContent=x.name;name.append(title);let resp=td(x.responsible),dept=td(x.department),cat=td("");cat.innerHTML="";let tag=document.createElement("span");tag.className="tag";tag.textContent=x.category;cat.append(tag);let pri=td(x.priority),detail=td(x.detail||"—"),actions=td("");actions.innerHTML="";let wrap=document.createElement("div");wrap.className="actions";let edit=document.createElement("button");edit.className="btn-soft";edit.textContent="Editar";edit.onclick=()=>openEdit(x);wrap.append(edit);if(admin){let del=document.createElement("button");del.className="btn-danger";del.textContent="Excluir";del.onclick=async()=>{if(confirm("Excluir este registro?")){await deleteDoc(D("demands",x.id));await addAudit(x.id,"Excluiu registro",{name:x.name});toast("Registro removido.");await loadAll()}};wrap.append(del)}actions.append(wrap);tr.append(date,name,resp,dept,cat,pri,detail,actions);tb.append(tr)});$("countLabel").textContent=`${list.length} registro(s) exibido(s) de ${demands.length}`;}
+onAuthStateChanged(auth,async u=>{if(!u){$("loginView").classList.remove("hidden");$("mainView").classList.add("hidden");return}user=u;try{let allow=await getDoc(D("allowlist",u.email.toLowerCase()));if(!allow.exists()||allow.data().active===false){await signOut(auth);$("loginMessage").textContent="Este e-mail não está autorizado. Solicite acesso ao administrador.";return}admin=allow.data().role==="admin";$("loginView").classList.add("hidden");$("mainView").classList.remove("hidden");$("profileName").textContent=u.displayName||u.email;$("profilePhoto").src=u.photoURL||"";$("adminNav").classList.toggle("hidden",!admin);await loadAll()}catch(e){toast("Não foi possível verificar o acesso: "+e.message);await signOut(auth)}});
+
+/* dados */
+async function loadAll(){try{const [ds,ps,dep,as]=await Promise.all([getDocs(query(C("demands"),orderBy("date","desc"))),getDocs(C("responsibles")),getDocs(C("departments")),getDocs(query(C("audit"),orderBy("createdAt","desc")))]);demands=ds.docs.map(d=>({id:d.id,...d.data()}));people=ps.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.active!==false).sort((a,b)=>byName(a.name,b.name));depts=dep.docs.map(d=>({id:d.id,...d.data()}));audit=as.docs.map(d=>({id:d.id,...d.data()}));fillSelectors();renderTable();renderDashboard();renderAdmin()}catch(e){toast("Erro ao carregar: "+e.message)}}
+/* departamentos = cadastrados + já usados em demandas (sem duplicar) */
+function deptNames(){const m=new Map();[...depts.map(d=>d.name),...demands.map(x=>x.department)].forEach(n=>{n=clean(n);if(n&&!m.has(norm(n)))m.set(norm(n),n)});return [...m.values()].sort(byName)}
+function options(sel,arr,ph){let old=sel.value;sel.innerHTML=`<option value="">${ph}</option>`+arr.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");if(arr.includes(old))sel.value=old}
+function fillSelectors(){const n=people.map(p=>p.name);options($("responsible"),n,"Selecione");options($("editResponsible"),n,"Selecione");options($("filterResponsible"),n,"Todos os responsáveis");options($("filterDept"),deptNames(),"Todos os departamentos")}
+async function saveDept(value){value=clean(value);if(!value)return;let id=norm(value);if(!depts.some(x=>norm(x.name)===id)){await setDoc(D("departments",id),{name:value,createdBy:user.uid,createdAt:serverTimestamp()});depts.push({id,name:value})}}
 async function addAudit(demandId,action,data){await addDoc(C("audit"),{demandId,action,recordName:data?.name||"",actor:user.uid,actorEmail:user.email,actorName:user.displayName||user.email,createdAt:serverTimestamp()})}
-function openEdit(x){$("editId").value=x.id;$("editName").value=x.name;$("editDetail").value=x.detail||"";$("editResponsible").value=x.responsible;$("editDate").value=x.date;$("editDepartment").value=x.department;$("editCategory").value=x.category;$("editPriority").value=x.priority||"Normal";$("editModal").classList.remove("hidden")}
+
+/* sugestões: a lista é lida na hora (função), por isso nunca fica desatualizada */
+function suggest(input,list,get){const show=()=>{const v=norm(input.value),m=get().filter(x=>!v||norm(x).includes(v)).slice(0,8);list.innerHTML="";m.forEach(x=>{const b=document.createElement("button");b.type="button";b.textContent=x;b.onmousedown=e=>{e.preventDefault();input.value=x;list.classList.add("hidden")};list.append(b)});list.classList.toggle("hidden",!m.length||(m.length===1&&norm(m[0])===v))};input.addEventListener("input",show);input.addEventListener("focus",show);input.addEventListener("blur",()=>list.classList.add("hidden"));input.addEventListener("keydown",e=>{if(e.key==="Escape")list.classList.add("hidden")})}
+suggest($("department"),$("deptSuggest"),deptNames);
+suggest($("editDepartment"),$("editDeptSuggest"),deptNames);
+suggest($("demandName"),$("nameSuggest"),()=>[...new Set(demands.map(x=>x.name).filter(Boolean))]);
+
+/* registrar */
+$("demandForm").onsubmit=async e=>{e.preventDefault();let name=clean($("demandName").value),responsible=$("responsible").value,date=$("date").value,department=clean($("department").value);if(!name||!responsible||!date||!department){toast("Preencha todos os campos obrigatórios.");return}let b=$("saveDemand");b.disabled=true;b.textContent="Salvando…";try{await saveDept(department);let data={name,detail:clean($("detail").value),responsible,date,department,createdBy:user.uid,createdByEmail:user.email,createdByName:user.displayName||user.email,createdAt:serverTimestamp(),updatedAt:serverTimestamp()};let ref=await addDoc(C("demands"),data);await addAudit(ref.id,"Criou registro",data);toast("Demanda salva.");$("demandForm").reset();$("date").value=today();await loadAll()}catch(err){toast("Erro ao salvar: "+err.message)}finally{b.disabled=false;b.textContent="Salvar demanda"}};
+
+/* tabela */
+const FIL=["search","filterResponsible","filterDept","filterFrom","filterTo"];
+function getFiltered(){let s=norm($("search").value),p=$("filterResponsible").value,d=$("filterDept").value,f=$("filterFrom").value,t=$("filterTo").value;return demands.filter(x=>(!s||norm(x.name+" "+x.detail).includes(s))&&(!p||x.responsible===p)&&(!d||x.department===d)&&(!f||x.date>=f)&&(!t||x.date<=t))}
+FIL.forEach(id=>$(id).addEventListener("input",renderTable));
+$("clearFilters").onclick=()=>{FIL.forEach(id=>$(id).value="");renderTable()};
+function renderTable(){let list=getFiltered();$("tableBody").innerHTML=list.length?list.map(x=>`<tr><td class="nw">${fmt(x.date)}</td><td><div class="t1">${esc(x.name)}</div>${x.detail?`<div class="t2">${esc(x.detail)}</div>`:""}</td><td>${esc(x.responsible)||"—"}</td><td>${x.department?`<span class="tag">${esc(x.department)}</span>`:"—"}</td><td class="td-act"><div class="row-act"><button class="btn ghost sm" data-edit="${x.id}"><svg class="i"><use href="#i-edit"/></svg>Editar</button>${admin?`<button class="btn dg sm" data-del="${x.id}" aria-label="Excluir"><svg class="i"><use href="#i-trash"/></svg></button>`:""}</div></td></tr>`).join(""):'<tr><td colspan="5" class="empty">Nenhuma demanda encontrada. Ajuste os filtros ou registre uma nova demanda.</td></tr>';$("countLabel").textContent=`${list.length} de ${demands.length} registro(s)`}
+$("tableBody").onclick=async e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.edit){openEdit(demands.find(x=>x.id===b.dataset.edit))}else if(b.dataset.del&&admin){const x=demands.find(d=>d.id===b.dataset.del);if(x&&confirm("Excluir este registro?")){await deleteDoc(D("demands",x.id));await addAudit(x.id,"Excluiu registro",{name:x.name});toast("Registro excluído.");await loadAll()}}};
+
+/* edição */
+function openEdit(x){if(!x)return;$("editId").value=x.id;$("editName").value=x.name||"";$("editDetail").value=x.detail||"";$("editResponsible").value=x.responsible;$("editDate").value=x.date;$("editDepartment").value=x.department||"";$("editModal").classList.remove("hidden")}
 $("cancelEdit").onclick=()=>$("editModal").classList.add("hidden");
-$("editForm").onsubmit=async e=>{e.preventDefault();let id=$("editId").value,old=demands.find(x=>x.id===id);let data={name:clean($("editName").value),detail:clean($("editDetail").value),responsible:$("editResponsible").value,date:$("editDate").value,department:clean($("editDepartment").value),category:clean($("editCategory").value),priority:$("editPriority").value,updatedAt:serverTimestamp()};await saveSuggestion("departments",data.department);await saveSuggestion("categories",data.category);await updateDoc(D("demands",id),data);await addAudit(id,"Editou registro",data);$("editModal").classList.add("hidden");toast("Alterações salvas");await loadAll()};
-function renderDashboard(){let filtered=getFiltered();let month=today().slice(0,7);$("statTotal").textContent=demands.length;$("statMonth").textContent=demands.filter(x=>x.date?.startsWith(month)).length;$("statDepartments").textContent=new Set(demands.map(x=>x.department)).size;$("statPeople").textContent=new Set(demands.map(x=>x.responsible)).size;drawBars($("deptChart"),countBy(filtered,"department"),true);let monthLabels=[];let d=new Date();for(let i=5;i>=0;i--){let m=new Date(d.getFullYear(),d.getMonth()-i,1);monthLabels.push(m.toLocaleDateString("pt-BR",{month:"short",year:"2-digit"}))}let keys=[];for(let i=5;i>=0;i--){let m=new Date(d.getFullYear(),d.getMonth()-i,1);keys.push(m.toLocaleDateString("en-CA").slice(0,7))}drawBars($("monthChart"),keys.map((k,i)=>({label:monthLabels[i],value:demands.filter(x=>x.date?.startsWith(k)).length})),false)}
-function countBy(list,key){let m={};list.forEach(x=>m[x[key]||"Sem informação"]=(m[x[key]||"Sem informação"]||0)+1);return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,7).map(([label,value])=>({label,value}))}
-function drawBars(canvas,data,horizontal){let ctx=canvas.getContext("2d"),w=canvas.clientWidth||500,h=210,dpr=devicePixelRatio||1;canvas.width=w*dpr;canvas.height=h*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);if(!data.length){ctx.fillStyle="#887b99";ctx.font="13px DM Sans";ctx.fillText("Sem dados para visualizar",12,35);return}let max=Math.max(1,...data.map(x=>x.value));ctx.font="12px DM Sans";if(horizontal){let left=105,row=24,gap=7;data.forEach((x,i)=>{let y=10+i*(row+gap),barw=(w-left-35)*x.value/max;ctx.fillStyle="#eee5f8";ctx.fillRect(left,y,w-left-25,row);ctx.fillStyle="#7c2dd5";ctx.fillRect(left,y,barw,row);ctx.fillStyle="#4e3a62";ctx.textAlign="right";ctx.fillText(x.label.slice(0,16),left-7,y+16);ctx.textAlign="left";ctx.fillText(String(x.value),left+barw+5,y+16)})}else{let left=35,bottom=30,top=10,plotH=h-top-bottom,barw=Math.min(34,(w-left-15)/data.length-8);data.forEach((x,i)=>{let xx=left+i*(w-left-10)/data.length+5,barh=(plotH-15)*x.value/max;ctx.fillStyle="#8b3bdc";ctx.fillRect(xx,top+plotH-barh,barw,barh);ctx.fillStyle="#58446c";ctx.textAlign="center";ctx.fillText(String(x.value),xx+barw/2,top+plotH-barh-4);ctx.fillText(x.label.slice(0,9),xx+barw/2,h-8)})}}
-function exportRows(){return getFiltered().map(x=>({Data:x.date,"Nome da demanda":x.name,Descrição:x.detail||"",Responsável:x.responsible,Departamento:x.department,Categoria:x.category,Prioridade:x.priority,"Registrado por":x.createdByName||x.createdByEmail||""}))}
-$("csvExport").onclick=()=>{let rows=exportRows(),headers=Object.keys(rows[0]||{"Data":"","Nome da demanda":"","Descrição":"","Responsável":"","Departamento":"","Categoria":"","Prioridade":"","Registrado por":""}),csv="\uFEFF"+[headers,...rows.map(r=>headers.map(h=>r[h]))].map(row=>row.map(v=>'"'+String(v??"").replaceAll('"','""')+'"').join(";")).join("\r\n"),blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="SGD-demandas.csv";a.click();URL.revokeObjectURL(a.href)};
-$("xlsxExport").onclick=()=>{if(!window.XLSX){toast("Biblioteca Excel ainda carregando.");return}let ws=XLSX.utils.json_to_sheet(exportRows()),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Demandas");XLSX.writeFile(wb,"SGD-demandas.xlsx")};
+$("editForm").onsubmit=async e=>{e.preventDefault();let id=$("editId").value,data={name:clean($("editName").value),detail:clean($("editDetail").value),responsible:$("editResponsible").value,date:$("editDate").value,department:clean($("editDepartment").value),updatedAt:serverTimestamp()};try{await saveDept(data.department);await updateDoc(D("demands",id),data);await addAudit(id,"Editou registro",data);$("editModal").classList.add("hidden");toast("Alterações salvas.");await loadAll()}catch(err){toast("Erro ao salvar: "+err.message)}};
+
+/* painel */
+function renderDashboard(){let f=getFiltered(),month=today().slice(0,7);$("statTotal").textContent=demands.length;$("statMonth").textContent=demands.filter(x=>x.date?.startsWith(month)).length;$("statDepartments").textContent=new Set(demands.map(x=>x.department).filter(Boolean)).size;$("statPeople").textContent=new Set(demands.map(x=>x.responsible).filter(Boolean)).size;drawBars($("deptChart"),countBy(f,"department"),true);let now=new Date(),ms=[];for(let i=5;i>=0;i--){let m=new Date(now.getFullYear(),now.getMonth()-i,1);ms.push({label:m.toLocaleDateString("pt-BR",{month:"short"}).replace(".",""),value:demands.filter(x=>x.date?.startsWith(m.toLocaleDateString("en-CA").slice(0,7))).length})}drawBars($("monthChart"),ms,false)}
+function countBy(list,key){let m={};list.forEach(x=>{let k=x[key]||"Sem informação";m[k]=(m[k]||0)+1});return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,7).map(([label,value])=>({label,value}))}
+const cv=n=>getComputedStyle(root).getPropertyValue(n).trim();
+function drawBars(canvas,data,horiz){let ctx=canvas.getContext("2d"),w=canvas.clientWidth||500,h=210,dpr=devicePixelRatio||1;canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);const F='12px "Hanken Grotesk",sans-serif',ink=cv("--ink"),mut=cv("--mut"),ac=cv("--ac"),track=cv("--s2");ctx.font=F;if(!data.length||!data.some(x=>x.value)){ctx.fillStyle=mut;ctx.fillText("Sem dados para exibir",4,24);return}let max=Math.max(1,...data.map(x=>x.value));if(horiz){let left=118,row=22,gap=9;data.forEach((x,i)=>{let y=6+i*(row+gap),bw=(w-left-40)*x.value/max;ctx.fillStyle=track;ctx.fillRect(left,y,w-left-8,row);ctx.fillStyle=ac;ctx.fillRect(left,y,bw,row);ctx.fillStyle=mut;ctx.textAlign="right";ctx.fillText(x.label.length>17?x.label.slice(0,16)+"…":x.label,left-8,y+15);ctx.fillStyle=ink;ctx.textAlign="left";ctx.fillText(String(x.value),left+bw+6,y+15)})}else{let top=14,bottom=26,plot=h-top-bottom,slot=w/data.length,bw=Math.min(40,slot-14);data.forEach((x,i)=>{let bh=plot*x.value/max,xx=i*slot+(slot-bw)/2;ctx.fillStyle=x.value?ac:track;ctx.fillRect(xx,top+plot-Math.max(bh,2),bw,Math.max(bh,2));ctx.textAlign="center";ctx.fillStyle=ink;if(x.value)ctx.fillText(String(x.value),xx+bw/2,top+plot-bh-5);ctx.fillStyle=mut;ctx.fillText(x.label,xx+bw/2,h-8)})}}
+addEventListener("resize",()=>{if(viewing("dashboardView"))renderDashboard()});
+
+/* exportar */
+const HEAD=["Data","Nome da demanda","Descrição","Responsável","Departamento","Registrado por"];
+function exportRows(){return getFiltered().map(x=>({[HEAD[0]]:fmt(x.date),[HEAD[1]]:x.name,[HEAD[2]]:x.detail||"",[HEAD[3]]:x.responsible,[HEAD[4]]:x.department,[HEAD[5]]:x.createdByName||x.createdByEmail||""}))}
+$("csvExport").onclick=()=>{let rows=exportRows(),csv="\uFEFF"+[HEAD,...rows.map(r=>HEAD.map(h=>r[h]))].map(row=>row.map(v=>'"'+String(v??"").replaceAll('"','""')+'"').join(";")).join("\r\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download="SGD-demandas.csv";a.click();URL.revokeObjectURL(a.href)};
+$("xlsxExport").onclick=()=>{if(!window.XLSX){toast("A biblioteca do Excel ainda está carregando.");return}let ws=XLSX.utils.json_to_sheet(exportRows(),{header:HEAD}),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Demandas");XLSX.writeFile(wb,"SGD-demandas.xlsx")};
 $("pdfExport").onclick=()=>window.print();
+
+/* navegação */
 document.querySelectorAll(".nav button[data-view]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));$(b.dataset.view).classList.remove("hidden");if(b.dataset.view==="dashboardView"){renderDashboard();renderTable()}});
-$("addPerson").onclick=async()=>{if(!admin)return;let name=clean($("newPerson").value);if(!name)return;if(people.some(p=>norm(p.name)===norm(name))){toast("Nome já existe.");return}await addDoc(C("responsibles"),{name,active:true,createdAt:serverTimestamp(),createdBy:user.uid});$("newPerson").value="";toast("Responsável adicionado");await loadAll()};
-function renderAdmin(){if(!admin)return;$("peopleList").innerHTML="";people.forEach(p=>{let row=document.createElement("div");row.className="admin-row";let n=document.createElement("span");n.textContent=p.name;let btn=document.createElement("button");btn.className="btn-danger btn-small";btn.textContent="Desativar";btn.onclick=async()=>{if(confirm(`Desativar ${p.name}?`)){await updateDoc(D("responsibles",p.id),{active:false});await loadAll()}};row.append(n,btn);$("peopleList").append(row)});$("deptAdminList").innerHTML=depts.map(d=>`<div class="admin-row"><span>${esc(d.name)}</span><span class="subtle">Sugestão automática</span></div>`).join("");$("auditList").innerHTML=audit.slice(0,30).map(a=>`<div class="admin-row"><span><strong>${esc(a.action||"Ação")}</strong> · ${esc(a.recordName||"registro")}<div class="subtle">${esc(a.actorName||a.actorEmail||"usuário")}</div></span><span class="subtle">${a.createdAt?.toDate?.().toLocaleString("pt-BR")||"—"}</span></div>`).join("")||'<div class="empty">Ainda não há alterações registradas.</div>'}
-function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+/* administração */
+$("addPerson").onclick=async()=>{if(!admin)return;let name=clean($("newPerson").value);if(!name)return;if(people.some(p=>norm(p.name)===norm(name))){toast("Esse nome já existe.");return}await addDoc(C("responsibles"),{name,active:true,createdAt:serverTimestamp(),createdBy:user.uid});$("newPerson").value="";toast("Responsável adicionado.");await loadAll()};
+function renderAdmin(){if(!admin)return;$("peopleList").innerHTML=people.map(p=>`<div class="admin-row"><span>${esc(p.name)}</span><button class="btn dg sm" data-off="${p.id}">Desativar</button></div>`).join("")||'<div class="empty">Nenhum responsável cadastrado.</div>';$("deptAdminList").innerHTML=deptNames().map(n=>`<div class="admin-row"><span>${esc(n)}</span></div>`).join("")+'<div class="help" style="margin-top:10px">Os departamentos entram na lista automaticamente quando você os usa em um registro.</div>';$("auditList").innerHTML=audit.slice(0,30).map(a=>`<div class="admin-row"><span><strong>${esc(a.action||"Ação")}</strong> · ${esc(a.recordName||"registro")}<div class="small muted">${esc(a.actorName||a.actorEmail||"usuário")}</div></span><span class="small muted">${a.createdAt?.toDate?.().toLocaleString("pt-BR")||"—"}</span></div>`).join("")||'<div class="empty">Ainda não há alterações registradas.</div>'}
+$("peopleList").onclick=async e=>{const b=e.target.closest("[data-off]");if(!b||!admin)return;const p=people.find(x=>x.id===b.dataset.off);if(p&&confirm(`Desativar ${p.name}?`)){await updateDoc(D("responsibles",p.id),{active:false});await loadAll()}};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-</body></html>
+</body>
+</html>
