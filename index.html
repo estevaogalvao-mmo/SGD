@@ -94,6 +94,13 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
 .t-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px}
 .admin-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line)}.admin-row:last-child{border-bottom:0}
 .add-row{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap}.add-row input{max-width:360px}
+/* armazenamento */
+.meter{height:12px;background:var(--s2);border-radius:99px;overflow:hidden;margin:12px 0 8px}.meter i{display:block;height:100%;background:var(--ac);border-radius:99px;transition:width .4s}.meter.hot i{background:var(--dg)}
+.big{font-size:28px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.range{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin:14px 0}.range div{min-width:170px}.range label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}
+.btn.danger{background:var(--dg);color:#fff}html[data-theme=dark] .btn.danger{color:#2a0610}
+.warn{border-color:color-mix(in srgb,var(--dg) 45%,var(--line))}
+#delPreview{min-height:24px;margin-bottom:14px}
 /* modal / toast */
 .modal{position:fixed;inset:0;background:var(--ov);display:grid;place-items:center;padding:18px;z-index:40}
 .mbox{width:min(660px,100%);max-height:92vh;overflow:auto;background:var(--s);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 24px 60px #0006}
@@ -122,6 +129,7 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
 <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
 <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
 <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></symbol>
+<symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
 <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
 </defs></svg>
 
@@ -134,11 +142,12 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
 
 <div id="mainView" class="shell hidden">
 <aside class="side">
- <div class="brand"><img src="assets/logo-mmo.png" alt=""><div><b>SGD</b><span>Gerenciamento de Demandas</span></div></div>
+ <div class="brand"><img id="brandLogo" src="assets/logo-adv.png" alt=""><div><b>SGD</b><span>Gerenciamento de Demandas</span></div></div>
  <nav class="nav">
   <button class="active" data-view="newView"><svg class="i"><use href="#i-plus"/></svg>Registrar demanda</button>
   <button data-view="dashboardView"><svg class="i"><use href="#i-grid"/></svg>Painel e registros</button>
-  <button id="adminNav" class="hidden" data-view="adminView"><svg class="i"><use href="#i-gear"/></svg>Administração</button>
+  <button id="adminNav" class="admin-only hidden" data-view="adminView"><svg class="i"><use href="#i-gear"/></svg>Administração</button>
+  <button class="admin-only hidden" data-view="storageView"><svg class="i"><use href="#i-db"/></svg>Armazenamento</button>
  </nav>
  <div class="me">
   <div class="who"><img id="profilePhoto" src="" alt=""><span id="profileName"></span></div>
@@ -173,7 +182,26 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
  <div class="panel"><div class="p-head"><h2>Departamentos</h2></div><div id="deptAdminList"></div></div>
  <div class="panel"><div class="p-head"><h2>Últimas alterações</h2></div><div id="auditList"></div></div>
 </section>
+
+<section id="storageView" class="view hidden">
+ <div class="ph"><h1>Armazenamento</h1><p>Quanto do banco de dados está em uso e limpeza por período.</p></div>
+ <div class="panel"><div class="p-head"><h2>Uso do banco de dados</h2></div>
+  <div class="big" id="stTotal">—</div><div class="small muted" id="stSub"></div>
+  <div class="meter" id="stMeter"><i id="stBar" style="width:0"></i></div>
+  <div class="small muted" id="stCap"></div>
+  <div class="tw" style="margin-top:16px"><table style="min-width:0"><thead><tr><th>Coleção</th><th>Documentos</th><th>Tamanho estimado</th></tr></thead><tbody id="stRows"></tbody></table></div>
+  <div class="help" style="margin-top:12px">Valor estimado a partir dos dados carregados, incluindo uma margem para índices. O número exato fica em Firebase Console, na aba Uso do Firestore. Plano gratuito: 1 GiB armazenado e 20 mil exclusões por dia.</div></div>
+ <div class="panel warn"><div class="p-head"><h2>Apagar demandas por período</h2></div>
+  <div class="small muted">Apaga todas as demandas com data de realização dentro do período escolhido. Não dá para desfazer, então baixe o backup antes.</div>
+  <div class="range"><div><label for="stFrom">De</label><input id="stFrom" type="date"></div><div><label for="stTo">Até</label><input id="stTo" type="date"></div></div>
+  <div id="delPreview" class="small muted">Escolha as duas datas para ver quantas demandas entram no período.</div>
+  <div class="exp"><button class="btn sec" id="delBackup" disabled><svg class="i"><use href="#i-dl"/></svg>Baixar backup (CSV)</button><button class="btn danger" id="delStart" disabled><svg class="i"><use href="#i-trash"/></svg>Apagar demandas do período</button></div></div>
+</section>
 </main></div>
+
+<div id="delModal" class="modal hidden"><div class="mbox" style="width:min(480px,100%)"><h2>Apagar demandas do período</h2><p id="delText" class="muted"></p>
+ <div style="margin-top:16px"><label for="delConfirm" class="small" style="font-weight:600;display:block;margin-bottom:6px">Digite APAGAR para confirmar</label><input id="delConfirm" autocomplete="off"></div>
+ <div class="actions-row"><button class="btn sec" id="delCancel">Cancelar</button><button class="btn danger" id="delGo" disabled>Apagar definitivamente</button></div></div></div>
 
 <div id="editModal" class="modal hidden"><div class="mbox"><h2>Editar registro</h2><form id="editForm"><input id="editId" type="hidden"><div class="grid">
  <div class="f full"><label>Nome da demanda <span class="req">*</span></label><input id="editName" required></div>
@@ -200,9 +228,11 @@ provider.setCustomParameters({prompt:"select_account"});
 const $=id=>document.getElementById(id),C=n=>collection(db,n),D=(c,id)=>doc(db,c,id),norm=s=>String(s||"").trim().replace(/\s+/g," ").toLocaleLowerCase("pt-BR"),clean=s=>String(s||"").trim().replace(/\s+/g," ");
 const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt=d=>d?d.split("-").reverse().join("/"):"—",today=()=>new Date().toLocaleDateString("en-CA"),byName=(a,b)=>a.localeCompare(b,"pt-BR");
-let user=null,admin=false,demands=[],people=[],depts=[],audit=[];
+let user=null,admin=false,demands=[],people=[],rawPeople=[],depts=[],audit=[];
 function toast(s){let el=document.createElement("div");el.className="toast";el.textContent=s;document.body.append(el);setTimeout(()=>el.remove(),3800)}
 
+/* logo do menu: tenta outras extensões se o .png não existir */
+{const lg=$("brandLogo"),ext=["jpg","jpeg","svg","webp"];lg.onerror=()=>{const e=ext.shift();if(e)lg.src="assets/logo-adv."+e;else lg.onerror=null}}
 /* tema */
 const root=document.documentElement,viewing=id=>!$(id).classList.contains("hidden");
 function setTheme(t){root.dataset.theme=t;try{localStorage.setItem("sgd-theme",t)}catch(e){}if(viewing("dashboardView"))renderDashboard()}
@@ -212,10 +242,10 @@ document.querySelectorAll(".theme-btn").forEach(b=>b.onclick=()=>setTheme(root.d
 $("date").value=today();
 $("googleLogin").onclick=async()=>{try{$("loginMessage").textContent="";await signInWithPopup(auth,provider)}catch(e){$("loginMessage").textContent="Não foi possível entrar: "+e.message}};
 $("logout").onclick=()=>signOut(auth);
-onAuthStateChanged(auth,async u=>{if(!u){$("loginView").classList.remove("hidden");$("mainView").classList.add("hidden");return}user=u;try{let allow=await getDoc(D("allowlist",u.email.toLowerCase()));if(!allow.exists()||allow.data().active===false){await signOut(auth);$("loginMessage").textContent="Este e-mail não está autorizado. Solicite acesso ao administrador.";return}admin=allow.data().role==="admin";$("loginView").classList.add("hidden");$("mainView").classList.remove("hidden");$("profileName").textContent=u.displayName||u.email;$("profilePhoto").src=u.photoURL||"";$("adminNav").classList.toggle("hidden",!admin);await loadAll()}catch(e){toast("Não foi possível verificar o acesso: "+e.message);await signOut(auth)}});
+onAuthStateChanged(auth,async u=>{if(!u){$("loginView").classList.remove("hidden");$("mainView").classList.add("hidden");return}user=u;try{let allow=await getDoc(D("allowlist",u.email.toLowerCase()));if(!allow.exists()||allow.data().active===false){await signOut(auth);$("loginMessage").textContent="Este e-mail não está autorizado. Solicite acesso ao administrador.";return}admin=allow.data().role==="admin";$("loginView").classList.add("hidden");$("mainView").classList.remove("hidden");$("profileName").textContent=u.displayName||u.email;$("profilePhoto").src=u.photoURL||"";document.querySelectorAll(".admin-only").forEach(b=>b.classList.toggle("hidden",!admin));await loadAll()}catch(e){toast("Não foi possível verificar o acesso: "+e.message);await signOut(auth)}});
 
 /* dados */
-async function loadAll(){try{const [ds,ps,dep,as]=await Promise.all([getDocs(query(C("demands"),orderBy("date","desc"))),getDocs(C("responsibles")),getDocs(C("departments")),getDocs(query(C("audit"),orderBy("createdAt","desc")))]);demands=ds.docs.map(d=>({id:d.id,...d.data()}));people=ps.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.active!==false).sort((a,b)=>byName(a.name,b.name));depts=dep.docs.map(d=>({id:d.id,...d.data()}));audit=as.docs.map(d=>({id:d.id,...d.data()}));fillSelectors();renderTable();renderDashboard();renderAdmin()}catch(e){toast("Erro ao carregar: "+e.message)}}
+async function loadAll(){try{const [ds,ps,dep,as]=await Promise.all([getDocs(query(C("demands"),orderBy("date","desc"))),getDocs(C("responsibles")),getDocs(C("departments")),getDocs(query(C("audit"),orderBy("createdAt","desc")))]);demands=ds.docs.map(d=>({id:d.id,...d.data()}));rawPeople=ps.docs.map(d=>({id:d.id,...d.data()}));people=rawPeople.filter(p=>p.active!==false).sort((a,b)=>byName(a.name,b.name));depts=dep.docs.map(d=>({id:d.id,...d.data()}));audit=as.docs.map(d=>({id:d.id,...d.data()}));fillSelectors();renderTable();renderDashboard();renderAdmin();renderStorage()}catch(e){toast("Erro ao carregar: "+e.message)}}
 /* departamentos = cadastrados + já usados em demandas (sem duplicar) */
 function deptNames(){const m=new Map();[...depts.map(d=>d.name),...demands.map(x=>x.department)].forEach(n=>{n=clean(n);if(n&&!m.has(norm(n)))m.set(norm(n),n)});return [...m.values()].sort(byName)}
 function options(sel,arr,ph){let old=sel.value;sel.innerHTML=`<option value="">${ph}</option>`+arr.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");if(arr.includes(old))sel.value=old}
@@ -254,13 +284,28 @@ addEventListener("resize",()=>{if(viewing("dashboardView"))renderDashboard()});
 
 /* exportar */
 const HEAD=["Data","Nome da demanda","Descrição","Responsável","Departamento","Registrado por"];
-function exportRows(){return getFiltered().map(x=>({[HEAD[0]]:fmt(x.date),[HEAD[1]]:x.name,[HEAD[2]]:x.detail||"",[HEAD[3]]:x.responsible,[HEAD[4]]:x.department,[HEAD[5]]:x.createdByName||x.createdByEmail||""}))}
-$("csvExport").onclick=()=>{let rows=exportRows(),csv="\uFEFF"+[HEAD,...rows.map(r=>HEAD.map(h=>r[h]))].map(row=>row.map(v=>'"'+String(v??"").replaceAll('"','""')+'"').join(";")).join("\r\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download="SGD-demandas.csv";a.click();URL.revokeObjectURL(a.href)};
+function exportRows(list=getFiltered()){return list.map(x=>({[HEAD[0]]:fmt(x.date),[HEAD[1]]:x.name,[HEAD[2]]:x.detail||"",[HEAD[3]]:x.responsible,[HEAD[4]]:x.department,[HEAD[5]]:x.createdByName||x.createdByEmail||""}))}
+function downloadCsv(list,file){let rows=exportRows(list),csv="\uFEFF"+[HEAD,...rows.map(r=>HEAD.map(h=>r[h]))].map(row=>row.map(v=>'"'+String(v??"").replaceAll('"','""')+'"').join(";")).join("\r\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=file;a.click();URL.revokeObjectURL(a.href)}
+$("csvExport").onclick=()=>downloadCsv(getFiltered(),"SGD-demandas.csv");
 $("xlsxExport").onclick=()=>{if(!window.XLSX){toast("A biblioteca do Excel ainda está carregando.");return}let ws=XLSX.utils.json_to_sheet(exportRows(),{header:HEAD}),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Demandas");XLSX.writeFile(wb,"SGD-demandas.xlsx")};
 $("pdfExport").onclick=()=>window.print();
 
 /* navegação */
-document.querySelectorAll(".nav button[data-view]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));$(b.dataset.view).classList.remove("hidden");if(b.dataset.view==="dashboardView"){renderDashboard();renderTable()}});
+document.querySelectorAll(".nav button[data-view]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));$(b.dataset.view).classList.remove("hidden");if(b.dataset.view==="dashboardView"){renderDashboard();renderTable()}if(b.dataset.view==="storageView")renderStorage()});
+
+/* armazenamento */
+const enc=new TextEncoder(),u8=s=>enc.encode(String(s)).length,LIM=2**30;
+function docBytes(col,d){const nm=col.length+String(d.id).length+16;let n=nm+32,ix=0;for(const [k,v] of Object.entries(d)){if(k==="id")continue;const val=typeof v==="string"?u8(v)+1:v&&v.toDate?8:1;n+=u8(k)+1+val;ix+=2*(nm+u8(k)+Math.min(val,1500)+32)}return n+ix}
+function fmtB(b){return b<1024?b+" B":b<1048576?(b/1024).toLocaleString("pt-BR",{maximumFractionDigits:1})+" KB":b<LIM?(b/1048576).toLocaleString("pt-BR",{maximumFractionDigits:1})+" MB":(b/LIM).toLocaleString("pt-BR",{maximumFractionDigits:2})+" GB"}
+function renderStorage(){if(!admin)return;const cols=[["demands","Demandas",demands],["audit","Histórico de alterações",audit],["responsibles","Responsáveis",rawPeople],["departments","Departamentos",depts]];let total=0,dem=0;const rows=cols.map(([c,l,a])=>{const b=a.reduce((t,d)=>t+docBytes(c,d),0);total+=b;if(c==="demands")dem=b;return `<tr><td>${l}</td><td class="nw">${a.length.toLocaleString("pt-BR")}</td><td class="nw">${fmtB(b)}</td></tr>`}).join("");$("stRows").innerHTML=rows;const pct=total/LIM*100;$("stTotal").textContent=fmtB(total);$("stSub").textContent=`de 1 GiB do plano gratuito (${pct<0.01?"menos de 0,01":pct.toLocaleString("pt-BR",{maximumFractionDigits:2})}% usado)`;$("stBar").style.width=Math.max(pct,.8)+"%";$("stMeter").classList.toggle("hot",pct>=80);$("stCap").textContent=demands.length?`Cabem cerca de ${Math.floor((LIM-total)/(dem/demands.length)).toLocaleString("pt-BR")} demandas novas com o espaço restante.`:"";renderDelPreview()}
+const inRange=()=>{const f=$("stFrom").value,t=$("stTo").value;return f&&t&&f<=t?demands.filter(x=>x.date>=f&&x.date<=t):null};
+function renderDelPreview(){const f=$("stFrom").value,t=$("stTo").value,list=inRange(),pv=$("delPreview");$("delBackup").disabled=$("delStart").disabled=!list||!list.length;if(f&&t&&f>t)pv.textContent="A data inicial precisa ser anterior à final.";else if(!list)pv.textContent="Escolha as duas datas para ver quantas demandas entram no período.";else{pv.innerHTML=`<strong>${list.length.toLocaleString("pt-BR")}</strong> demanda(s) entre ${fmt(f)} e ${fmt(t)}.`+(list.length>20000?" O plano gratuito permite 20 mil exclusões por dia.":"")}}
+["stFrom","stTo"].forEach(id=>$(id).addEventListener("input",renderDelPreview));
+$("delBackup").onclick=()=>{const l=inRange();if(l?.length)downloadCsv(l,`SGD-backup-${$("stFrom").value}_a_${$("stTo").value}.csv`)};
+$("delStart").onclick=()=>{const l=inRange();if(!l?.length)return;$("delText").textContent=`${l.length.toLocaleString("pt-BR")} demanda(s) entre ${fmt($("stFrom").value)} e ${fmt($("stTo").value)} serão apagadas para sempre.`;$("delConfirm").value="";$("delGo").disabled=true;$("delModal").classList.remove("hidden");$("delConfirm").focus()};
+$("delConfirm").addEventListener("input",()=>$("delGo").disabled=$("delConfirm").value.trim().toUpperCase()!=="APAGAR");
+$("delCancel").onclick=()=>$("delModal").classList.add("hidden");
+$("delGo").onclick=async()=>{if(!admin)return;const l=inRange();if(!l?.length)return;const f=$("stFrom").value,t=$("stTo").value,b=$("delGo");b.disabled=true;$("delCancel").disabled=true;let ok=0;try{for(let i=0;i<l.length;i+=20){await Promise.all(l.slice(i,i+20).map(x=>deleteDoc(D("demands",x.id))));ok+=Math.min(20,l.length-i);b.textContent=`Apagando… ${ok}/${l.length}`}toast(`${ok} demanda(s) apagada(s).`)}catch(e){toast(`Parou após ${ok} exclusão(ões): ${e.message}`)}finally{if(ok)await addAudit("",`Apagou ${ok} registros do período ${fmt(f)} a ${fmt(t)}`,{name:"Limpeza por período"});b.textContent="Apagar definitivamente";$("delCancel").disabled=false;$("delModal").classList.add("hidden");await loadAll()}};
 
 /* administração */
 $("addPerson").onclick=async()=>{if(!admin)return;let name=clean($("newPerson").value);if(!name)return;if(people.some(p=>norm(p.name)===norm(name))){toast("Esse nome já existe.");return}await addDoc(C("responsibles"),{name,active:true,createdAt:serverTimestamp(),createdBy:user.uid});$("newPerson").value="";toast("Responsável adicionado.");await loadAll()};
