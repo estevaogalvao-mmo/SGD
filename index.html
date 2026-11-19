@@ -16,7 +16,7 @@ h1,h2,h3,p{margin:0}button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 .hidden{display:none!important}.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:8px;padding:9px 15px;font-weight:600;font-size:14px;background:var(--ac);color:#fff;cursor:pointer;transition:background .15s,opacity .15s}
-.btn:hover{opacity:.9}.btn:disabled{opacity:.55;cursor:wait}
+.btn:hover{opacity:.9}.btn:disabled{opacity:.5;cursor:not-allowed}
 .btn.sec{background:var(--s);color:var(--ink);border-color:var(--line)}.btn.sec:hover{background:var(--s2);opacity:1}
 .btn.ghost{background:transparent;color:var(--ac-text)}.btn.ghost:hover{background:var(--ac-soft);opacity:1}
 .btn.dg{background:transparent;color:var(--dg)}.btn.dg:hover{background:var(--s2);opacity:1}
@@ -39,7 +39,7 @@ h1,h2,h3,p{margin:0}button,input,select,textarea{font:inherit;color:inherit}
 .shell{display:grid;grid-template-columns:252px 1fr;min-height:100vh}
 .side{background:var(--side);color:var(--side-ink);padding:20px 14px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
 .brand{display:flex;align-items:center;gap:11px;padding:0 6px}
-.brand img{width:58px;height:58px;object-fit:contain;background:#fff;border-radius:12px;padding:4px}
+.brand img{width:50px;height:50px;object-fit:cover;background:#fff;border-radius:12px;padding:4px}
 .brand b{display:block;color:#fff;font-size:17px;font-weight:800;line-height:1.1}.brand span{font-size:12px;line-height:1.2;display:block;margin-top:2px}
 .nav{display:flex;flex-direction:column;gap:4px}
 .nav button{display:flex;align-items:center;gap:11px;width:100%;border:0;background:none;color:inherit;padding:10px 12px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;text-align:left}
@@ -132,7 +132,7 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
 </defs></svg>
 
 <section id="loginView" class="login">
- <div class="l-art"><div><small>Missão Mineira Oeste · OneVoice</small><h1>Organizar para avançar juntos.</h1><p>Um espaço único para registrar, acompanhar e transformar demandas concluídas em informação.</p></div></div>
+ <div class="l-art"><div><small>Missão Mineira Oeste</small><h1>Organizar para avançar juntos.</h1><p>Um espaço único para registrar, acompanhar e transformar demandas concluídas em informação.</p></div></div>
  <div class="l-side"><div class="l-card"><img class="logo" src="assets/logo-mmo.png" alt="Missão Mineira Oeste"><div class="small muted">Sistema de Gerenciamento de Demandas</div><h2>Bem-vindo</h2><p class="muted">Entre com sua conta Google autorizada para acessar o sistema.</p>
   <button class="btn sec g-btn" id="googleLogin"><b>G</b> Entrar com Google</button><div id="loginMessage" role="status"></div><p class="small muted">O acesso é restrito aos e-mails autorizados pela administração.</p></div></div>
 </section>
@@ -187,7 +187,7 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
   <div class="meter" id="stMeter"><i id="stBar" style="width:0"></i></div>
   <div class="small muted" id="stCap"></div>
   <div class="tw" style="margin-top:16px"><table style="min-width:0"><thead><tr><th>Coleção</th><th>Documentos</th><th>Tamanho estimado</th></tr></thead><tbody id="stRows"></tbody></table></div>
-  <div class="help" style="margin-top:12px">Valor estimado a partir dos dados carregados, incluindo uma margem para índices. O número exato fica em Firebase Console, na aba Uso do Firestore. Plano gratuito: 1 GiB armazenado e 20 mil exclusões por dia.</div></div>
+  <div class="help" style="margin-top:12px">Valor estimado a partir dos dados carregados, incluindo uma margem para índices.</div></div>
  <div class="panel warn"><div class="p-head"><h2>Apagar demandas por período</h2></div>
   <div class="small muted">Apaga todas as demandas com data de realização dentro do período escolhido. Não dá para desfazer, então baixe o backup antes.</div>
   <div class="range"><div><label for="stFrom">De</label><input id="stFrom" type="date"></div><div><label for="stTo">Até</label><input id="stTo" type="date"></div></div>
@@ -297,7 +297,7 @@ function docBytes(col,d){const nm=col.length+String(d.id).length+16;let n=nm+32,
 function fmtB(b){return b<1024?b+" B":b<1048576?(b/1024).toLocaleString("pt-BR",{maximumFractionDigits:1})+" KB":b<LIM?(b/1048576).toLocaleString("pt-BR",{maximumFractionDigits:1})+" MB":(b/LIM).toLocaleString("pt-BR",{maximumFractionDigits:2})+" GB"}
 function renderStorage(){if(!admin)return;const cols=[["demands","Demandas",demands],["audit","Histórico de alterações",audit],["responsibles","Responsáveis",rawPeople],["departments","Departamentos",depts]];let total=0,dem=0;const rows=cols.map(([c,l,a])=>{const b=a.reduce((t,d)=>t+docBytes(c,d),0);total+=b;if(c==="demands")dem=b;return `<tr><td>${l}</td><td class="nw">${a.length.toLocaleString("pt-BR")}</td><td class="nw">${fmtB(b)}</td></tr>`}).join("");$("stRows").innerHTML=rows;const pct=total/LIM*100;$("stTotal").textContent=fmtB(total);$("stSub").textContent=`de 1 GiB do plano gratuito (${pct<0.01?"menos de 0,01":pct.toLocaleString("pt-BR",{maximumFractionDigits:2})}% usado)`;$("stBar").style.width=Math.max(pct,.8)+"%";$("stMeter").classList.toggle("hot",pct>=80);$("stCap").textContent=demands.length?`Cabem cerca de ${Math.floor((LIM-total)/(dem/demands.length)).toLocaleString("pt-BR")} demandas novas com o espaço restante.`:"";renderDelPreview()}
 const inRange=()=>{const f=$("stFrom").value,t=$("stTo").value;return f&&t&&f<=t?demands.filter(x=>x.date>=f&&x.date<=t):null};
-function renderDelPreview(){const f=$("stFrom").value,t=$("stTo").value,list=inRange(),pv=$("delPreview");$("delBackup").disabled=$("delStart").disabled=!list||!list.length;if(f&&t&&f>t)pv.textContent="A data inicial precisa ser anterior à final.";else if(!list)pv.textContent="Escolha as duas datas para ver quantas demandas entram no período.";else{pv.innerHTML=`<strong>${list.length.toLocaleString("pt-BR")}</strong> demanda(s) entre ${fmt(f)} e ${fmt(t)}.`+(list.length>20000?" O plano gratuito permite 20 mil exclusões por dia.":"")}}
+function renderDelPreview(){const f=$("stFrom").value,t=$("stTo").value,list=inRange(),pv=$("delPreview");$("delBackup").disabled=$("delStart").disabled=!list||!list.length;if(f&&t&&f>t)pv.textContent="A data inicial precisa ser anterior à final.";else if(!list)pv.textContent="Escolha as duas datas para ver quantas demandas entram no período.";else if(!list.length)pv.textContent=`Nenhuma demanda com data de realização entre ${fmt(f)} e ${fmt(t)}.`;else{pv.innerHTML=`<strong>${list.length.toLocaleString("pt-BR")}</strong> demanda(s) entre ${fmt(f)} e ${fmt(t)}.`+(list.length>20000?" O plano gratuito permite 20 mil exclusões por dia.":"")}}
 ["stFrom","stTo"].forEach(id=>$(id).addEventListener("input",renderDelPreview));
 $("delBackup").onclick=()=>{const l=inRange();if(l?.length)downloadCsv(l,`SGD-backup-${$("stFrom").value}_a_${$("stTo").value}.csv`)};
 $("delStart").onclick=()=>{const l=inRange();if(!l?.length)return;$("delText").textContent=`${l.length.toLocaleString("pt-BR")} demanda(s) entre ${fmt($("stFrom").value)} e ${fmt($("stTo").value)} serão apagadas para sempre.`;$("delConfirm").value="";$("delGo").disabled=true;$("delModal").classList.remove("hidden");$("delConfirm").focus()};
