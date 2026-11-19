@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SGD · Sistema de Gerenciamento de Demandas</title>
-<script>try{var t=localStorage.getItem("sgd-theme")}catch(e){}document.documentElement.dataset.theme=t||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")</script>
+<script>document.documentElement.dataset.theme="light"</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,8 +30,7 @@ h1,h2,h3,p{margin:0}button,input,select,textarea{font:inherit;color:inherit}
 .l-art h1{font-size:clamp(34px,4.6vw,56px);line-height:1.05;font-weight:800;letter-spacing:-.02em;margin:10px 0 14px}
 .l-art p{color:#e6dcfa;font-size:17px;max-width:460px}.l-art small{color:#d5c3f5;font-size:14px;font-weight:500}
 .l-side{display:flex;align-items:center;justify-content:center;padding:32px;position:relative}
-.l-side .tbtn{position:absolute;top:18px;right:18px}
-.l-card{width:min(400px,100%)}.l-card .logo{width:60px;height:60px;object-fit:contain;margin-bottom:22px}
+.l-card{width:min(400px,100%)}.l-card .logo{width:154px;height:64px;object-fit:contain;margin-bottom:24px}
 .l-card h2{font-size:28px;font-weight:800;letter-spacing:-.02em;margin:4px 0 6px}
 .g-btn{width:100%;margin:24px 0 12px;padding:12px}
 .g-btn b{font-weight:800;font-size:18px;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 0 50%,#fbbc05 0 75%,#ea4335 0);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -40,7 +39,7 @@ h1,h2,h3,p{margin:0}button,input,select,textarea{font:inherit;color:inherit}
 .shell{display:grid;grid-template-columns:252px 1fr;min-height:100vh}
 .side{background:var(--side);color:var(--side-ink);padding:20px 14px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
 .brand{display:flex;align-items:center;gap:11px;padding:0 6px}
-.brand img{width:40px;height:40px;object-fit:contain;background:#fff;border-radius:10px;padding:4px}
+.brand img{width:58px;height:58px;object-fit:contain;background:#fff;border-radius:12px;padding:4px}
 .brand b{display:block;color:#fff;font-size:17px;font-weight:800;line-height:1.1}.brand span{font-size:12px;line-height:1.2;display:block;margin-top:2px}
 .nav{display:flex;flex-direction:column;gap:4px}
 .nav button{display:flex;align-items:center;gap:11px;width:100%;border:0;background:none;color:inherit;padding:10px 12px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;text-align:left}
@@ -53,7 +52,6 @@ h1,h2,h3,p{margin:0}button,input,select,textarea{font:inherit;color:inherit}
 .me .btn{background:#ffffff14;color:#fff;border-color:transparent}.me .btn:hover{background:#ffffff26;opacity:1}.me .btn.out{flex:1}
 .tbtn{width:38px;height:38px;padding:0}
 .tbtn .moon{display:none}html[data-theme=dark] .tbtn .moon{display:block}html[data-theme=dark] .tbtn .sun{display:none}
-.l-side .tbtn{background:var(--s);color:var(--ink);border:1px solid var(--line)}
 main{padding:32px clamp(18px,3.5vw,48px) 48px;min-width:0;max-width:1320px;width:100%}
 .ph{margin-bottom:22px}.ph h1{font-size:26px;font-weight:800;letter-spacing:-.02em}.ph p{color:var(--mut);margin-top:3px}
 .panel{background:var(--s);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:22px;margin-bottom:18px}
@@ -135,8 +133,7 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
 
 <section id="loginView" class="login">
  <div class="l-art"><div><small>Missão Mineira Oeste · OneVoice</small><h1>Organizar para avançar juntos.</h1><p>Um espaço único para registrar, acompanhar e transformar demandas concluídas em informação.</p></div></div>
- <div class="l-side"><button class="btn tbtn theme-btn" aria-label="Alternar tema"><svg class="i sun"><use href="#i-sun"/></svg><svg class="i moon"><use href="#i-moon"/></svg></button>
-  <div class="l-card"><img class="logo" src="assets/logo-mmo.png" alt="Missão Mineira Oeste"><div class="small muted">Sistema de Gerenciamento de Demandas</div><h2>Bem-vindo</h2><p class="muted">Entre com sua conta Google autorizada para acessar o sistema.</p>
+ <div class="l-side"><div class="l-card"><img class="logo" src="assets/logo-mmo.png" alt="Missão Mineira Oeste"><div class="small muted">Sistema de Gerenciamento de Demandas</div><h2>Bem-vindo</h2><p class="muted">Entre com sua conta Google autorizada para acessar o sistema.</p>
   <button class="btn sec g-btn" id="googleLogin"><b>G</b> Entrar com Google</button><div id="loginMessage" role="status"></div><p class="small muted">O acesso é restrito aos e-mails autorizados pela administração.</p></div></div>
 </section>
 
@@ -235,14 +232,15 @@ function toast(s){let el=document.createElement("div");el.className="toast";el.t
 {const lg=$("brandLogo"),ext=["jpg","jpeg","svg","webp"];lg.onerror=()=>{const e=ext.shift();if(e)lg.src="assets/logo-adv."+e;else lg.onerror=null}}
 /* tema */
 const root=document.documentElement,viewing=id=>!$(id).classList.contains("hidden");
-function setTheme(t){root.dataset.theme=t;try{localStorage.setItem("sgd-theme",t)}catch(e){}if(viewing("dashboardView"))renderDashboard()}
+let pref=(()=>{try{var t=localStorage.getItem("sgd-theme")}catch(e){}return t||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")})();
+function setTheme(t){pref=t;root.dataset.theme=t;try{localStorage.setItem("sgd-theme",t)}catch(e){}if(viewing("dashboardView"))renderDashboard()}
 document.querySelectorAll(".theme-btn").forEach(b=>b.onclick=()=>setTheme(root.dataset.theme==="dark"?"light":"dark"));
 
 /* acesso */
 $("date").value=today();
 $("googleLogin").onclick=async()=>{try{$("loginMessage").textContent="";await signInWithPopup(auth,provider)}catch(e){$("loginMessage").textContent="Não foi possível entrar: "+e.message}};
 $("logout").onclick=()=>signOut(auth);
-onAuthStateChanged(auth,async u=>{if(!u){$("loginView").classList.remove("hidden");$("mainView").classList.add("hidden");return}user=u;try{let allow=await getDoc(D("allowlist",u.email.toLowerCase()));if(!allow.exists()||allow.data().active===false){await signOut(auth);$("loginMessage").textContent="Este e-mail não está autorizado. Solicite acesso ao administrador.";return}admin=allow.data().role==="admin";$("loginView").classList.add("hidden");$("mainView").classList.remove("hidden");$("profileName").textContent=u.displayName||u.email;$("profilePhoto").src=u.photoURL||"";document.querySelectorAll(".admin-only").forEach(b=>b.classList.toggle("hidden",!admin));await loadAll()}catch(e){toast("Não foi possível verificar o acesso: "+e.message);await signOut(auth)}});
+onAuthStateChanged(auth,async u=>{if(!u){root.dataset.theme="light";$("loginView").classList.remove("hidden");$("mainView").classList.add("hidden");return}user=u;try{let allow=await getDoc(D("allowlist",u.email.toLowerCase()));if(!allow.exists()||allow.data().active===false){await signOut(auth);$("loginMessage").textContent="Este e-mail não está autorizado. Solicite acesso ao administrador.";return}admin=allow.data().role==="admin";root.dataset.theme=pref;$("loginView").classList.add("hidden");$("mainView").classList.remove("hidden");$("profileName").textContent=u.displayName||u.email;$("profilePhoto").src=u.photoURL||"";document.querySelectorAll(".admin-only").forEach(b=>b.classList.toggle("hidden",!admin));await loadAll()}catch(e){toast("Não foi possível verificar o acesso: "+e.message);await signOut(auth)}});
 
 /* dados */
 async function loadAll(){try{const [ds,ps,dep,as]=await Promise.all([getDocs(query(C("demands"),orderBy("date","desc"))),getDocs(C("responsibles")),getDocs(C("departments")),getDocs(query(C("audit"),orderBy("createdAt","desc")))]);demands=ds.docs.map(d=>({id:d.id,...d.data()}));rawPeople=ps.docs.map(d=>({id:d.id,...d.data()}));people=rawPeople.filter(p=>p.active!==false).sort((a,b)=>byName(a.name,b.name));depts=dep.docs.map(d=>({id:d.id,...d.data()}));audit=as.docs.map(d=>({id:d.id,...d.data()}));fillSelectors();renderTable();renderDashboard();renderAdmin();renderStorage()}catch(e){toast("Erro ao carregar: "+e.message)}}
