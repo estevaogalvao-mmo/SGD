@@ -243,7 +243,7 @@ const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),p
 provider.setCustomParameters({prompt:"select_account"});
 const $=id=>document.getElementById(id),C=n=>collection(db,n),D=(c,id)=>doc(db,c,id),norm=s=>String(s||"").trim().replace(/\s+/g," ").toLocaleLowerCase("pt-BR"),clean=s=>String(s||"").trim().replace(/\s+/g," ");
 const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const fmt=d=>d?d.split("-").reverse().join("/"):"—",today=()=>new Date().toLocaleDateString("en-CA"),byName=(a,b)=>a.localeCompare(b,"pt-BR");
+const SEM_DATA="0001-01-01",fmt=d=>d===SEM_DATA?"sem data":d?d.split("-").reverse().join("/"):"—",today=()=>new Date().toLocaleDateString("en-CA"),byName=(a,b)=>a.localeCompare(b,"pt-BR");
 /* níveis de conta (campo role em allowlist/{email}); o que vale é o número do nível */
 const LV={user:1,admin:2,boss:3,"admin-non-removable":4},RL={user:"Usuário",admin:"Admin",boss:"Boss","admin-non-removable":"Admin fixo"};
 let user=null,role="user",admin=false,boss=false,demands=[],people=[],rawPeople=[],depts=[],accounts=null;
@@ -407,7 +407,7 @@ $("demandForm").onsubmit=async e=>{e.preventDefault();let name=clean($("demandNa
 
 /* tabela */
 const FIL=["search","filterResponsible","filterDept","filterFrom","filterTo"];
-function getFiltered(){let s=norm($("search").value),p=$("filterResponsible").value,d=$("filterDept").value,f=$("filterFrom").value,t=$("filterTo").value;return demands.filter(x=>(!s||norm(x.name+" "+x.detail).includes(s))&&(!p||x.responsible===p)&&(!d||x.department===d)&&(!f||x.date>=f)&&(!t||x.date<=t))}
+function getFiltered(){let s=norm($("search").value),p=$("filterResponsible").value,d=$("filterDept").value,f=$("filterFrom").value,t=$("filterTo").value;return demands.filter(x=>(!s||norm(x.name+" "+x.detail).includes(s))&&(!p||x.responsible===p)&&(!d||x.department===d)&&(!f||x.date>=f)&&(!t||(x.date<=t&&x.date!==SEM_DATA)))}
 FIL.forEach(id=>$(id).addEventListener("input",renderTable));
 $("clearFilters").onclick=()=>{FIL.forEach(id=>$(id).value="");renderTable()};
 function renderTable(){let list=getFiltered();$("tableBody").innerHTML=list.length?list.map(x=>`<tr><td class="nw">${fmt(x.date)}</td><td><div class="t1">${esc(x.name)}</div>${x.detail?`<div class="t2">${esc(x.detail)}</div>`:""}</td><td>${esc(x.responsible)||"—"}</td><td>${x.department?`<span class="tag">${esc(x.department)}</span>`:"—"}</td><td class="td-act"><div class="row-act"><button class="btn ghost sm" data-edit="${x.id}"><svg class="i"><use href="#i-edit"/></svg>Editar</button>${admin?`<button class="btn dg sm" data-del="${x.id}" aria-label="Excluir"><svg class="i"><use href="#i-trash"/></svg></button>`:""}</div></td></tr>`).join(""):'<tr><td colspan="5" class="empty">Nenhuma demanda encontrada. Ajuste os filtros ou registre uma nova demanda.</td></tr>';renderCount(list)}
@@ -449,8 +449,8 @@ async function downloadXlsx(list,file){
     headerFooter:{oddFooter:"&LSGD · Demandas&RPágina &P de &N"}});
   ws.columns=[{width:13},{width:38},{width:62},{width:24},{width:24},{width:28}];
   ws.addRow(HEAD);
-  const day=s=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||"");return m?new Date(Date.UTC(+m[1],+m[2]-1,+m[3])):null};
-  list.forEach(x=>ws.addRow([day(x.date)||x.date||"",x.name||"",x.detail||"",x.responsible||"",x.department||"",x.createdByName||x.createdByEmail||""]));
+  const day=s=>{const m=s!==SEM_DATA&&/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||"");return m?new Date(Date.UTC(+m[1],+m[2]-1,+m[3])):null};
+  list.forEach(x=>ws.addRow([day(x.date)||(x.date===SEM_DATA?"sem data":x.date||""),x.name||"",x.detail||"",x.responsible||"",x.department||"",x.createdByName||x.createdByEmail||""]));
   const side=c=>({style:"thin",color:{argb:c}}),box=c=>({top:side(c),left:side(c),bottom:side(c),right:side(c)});
   const hr=ws.getRow(1);hr.height=26;
   hr.eachCell(c=>{c.font={name:"Calibri",size:11,bold:true,color:{argb:"FFFFFFFF"}};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF6A31D6"}};c.alignment={vertical:"middle",horizontal:"left",indent:1};c.border=box("FF5522B8")});
@@ -544,5 +544,3 @@ $("accReload").onclick=()=>loadAccounts(true);
 </script>
 </body>
 </html>
-
-
