@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SGD · Sistema de Gerenciamento de Demandas</title>
-<link rel="icon" type="image/png" href="logo-nav.png?v=2">
-<link rel="apple-touch-icon" href="logo-nav.png?v=2">
+<link rel="icon" type="image/png" href="logo-nav.png">
+<link rel="apple-touch-icon" href="logo-nav.png">
 <script>document.documentElement.dataset.theme="light"</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,13 +49,13 @@ h1,h2,h3,p{margin:0}button,input,select,textarea{font:inherit;color:inherit}
 .me{margin-top:auto;display:flex;flex-direction:column;gap:12px;border-top:1px solid #ffffff1a;padding-top:14px}
 .who{display:flex;align-items:center;gap:10px;padding:0 6px;min-width:0}
 .who img{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#ffffff22}
-.who span{font-size:13px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who div{min-width:0;display:flex;flex-direction:column}.who span{font-size:13px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.who small{font-size:11.5px;line-height:1.3;color:var(--side-ink)}
 .me-actions{display:flex;gap:8px}
 .me .btn{background:#ffffff14;color:#fff;border-color:transparent}.me .btn:hover{background:#ffffff26;opacity:1}.me .btn.out{flex:1}
 .tbtn{width:38px;height:38px;padding:0}
 .tbtn .moon{display:none}html[data-theme=dark] .tbtn .moon{display:block}html[data-theme=dark] .tbtn .sun{display:none}
 main{padding:32px clamp(18px,3.5vw,48px) 48px;min-width:0;max-width:1320px;width:100%}
-.ph{margin-bottom:22px}.ph h1{font-size:26px;font-weight:800;letter-spacing:-.02em}.ph p{color:var(--mut);margin-top:3px}
+.ph{margin-bottom:22px}.hello{font-size:14px;font-weight:600;line-height:1.2;color:var(--ac-text);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hello:empty{display:none}.ph h1{font-size:26px;font-weight:800;letter-spacing:-.02em}.ph p{color:var(--mut);margin-top:3px}
 .panel{background:var(--s);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:22px;margin-bottom:18px}
 .p-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .p-head h2{font-size:17px;font-weight:700}
@@ -93,7 +93,7 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
 .empty{padding:36px 16px;text-align:center;color:var(--mut)}
 .t-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px}
 .admin-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line)}.admin-row:last-child{border-bottom:0}
-.add-row{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap}.add-row input{max-width:360px}
+.add-row{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap}.add-row input{max-width:360px}.add-row select{width:auto;min-width:130px}#accEmail{max-width:300px}#accName{max-width:240px}.tag.off{background:var(--s2);color:var(--mut)}
 /* armazenamento */
 .meter{height:12px;background:var(--s2);border-radius:99px;overflow:hidden;margin:12px 0 8px}.meter i{display:block;height:100%;background:var(--ac);border-radius:99px;transition:width .4s}.meter.hot i{background:var(--dg)}
 .big{font-size:28px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
@@ -109,7 +109,7 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
 @media(max-width:950px){.login{grid-template-columns:1fr}.l-art{min-height:34vh}
 .shell{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 14px}
 .nav{flex-direction:row;order:3;width:100%;overflow:auto}.nav button{width:auto;white-space:nowrap}
-.me{margin:0 0 0 auto;border:0;padding:0;flex-direction:row;align-items:center}.who span{display:none}
+.me{margin:0 0 0 auto;border:0;padding:0;flex-direction:row;align-items:center}.who div{display:none}
 .stats{grid-template-columns:1fr 1fr}.stat:nth-child(3){border-left:0}.stat:nth-child(n+3){border-top:1px solid var(--line)}
 .filters{grid-template-columns:1fr 1fr 1fr}.search{grid-column:span 3}.charts{grid-template-columns:1fr}}
 @media(max-width:620px){main{padding-top:20px}.f,.f.t{grid-column:span 12}.panel{padding:16px}.filters{grid-template-columns:1fr 1fr}.search{grid-column:span 2}.actions-row .btn{flex:1}.stat{padding:14px}.stat b{font-size:25px}}
@@ -131,6 +131,8 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
 <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></symbol>
 <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
 <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/><circle cx="9" cy="7" r="4"/></symbol>
 </defs></svg>
 
 <section id="loginView" class="login">
@@ -147,15 +149,16 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
   <button data-view="dashboardView"><svg class="i"><use href="#i-grid"/></svg>Painel e registros</button>
   <button id="adminNav" class="admin-only hidden" data-view="adminView"><svg class="i"><use href="#i-gear"/></svg>Administração</button>
   <button class="admin-only hidden" data-view="storageView"><svg class="i"><use href="#i-db"/></svg>Armazenamento</button>
+  <button class="boss-only hidden" data-view="accountsView"><svg class="i"><use href="#i-users"/></svg>Contas</button>
  </nav>
  <div class="me">
-  <div class="who"><img id="profilePhoto" src="" alt=""><span id="profileName"></span></div>
+  <div class="who"><img id="profilePhoto" src="" alt=""><div><span id="profileName"></span><small id="profileRole"></small></div></div>
   <div class="me-actions"><button class="btn tbtn theme-btn" aria-label="Alternar tema"><svg class="i sun"><use href="#i-sun"/></svg><svg class="i moon"><use href="#i-moon"/></svg></button><button class="btn sm out" id="logout"><svg class="i"><use href="#i-out"/></svg>Sair</button></div>
  </div>
 </aside>
 <main>
 <section id="newView" class="view">
- <div class="ph"><h1>Registrar demanda</h1><p>Cadastre uma demanda que já foi concluída.</p></div>
+ <div class="ph"><div class="hello" id="hello"></div><h1>Registrar demanda</h1><p>Cadastre uma demanda que já foi concluída.</p></div>
  <div class="panel form-panel"><form id="demandForm"><div class="grid">
   <div class="f full"><label for="demandName">Nome da demanda <span class="req">*</span></label><div class="sw"><input id="demandName" required autocomplete="off" placeholder="Ex.: Arte para divulgação, cobertura fotográfica"><div id="nameSuggest" class="sug hidden"></div></div><div class="help">Sugerimos nomes de registros anteriores, mas você pode cadastrar um nome novo.</div></div>
   <div class="f full"><label for="detail">Descrição <span class="muted">(opcional)</span></label><textarea id="detail" placeholder="Contexto, entregas e observações"></textarea></div>
@@ -169,7 +172,7 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
  <div class="ph"><h1>Painel e registros</h1><p>Visão geral das demandas concluídas.</p></div>
  <div class="stats"><div class="stat"><span>Total de demandas</span><b id="statTotal">0</b></div><div class="stat"><span>Este mês</span><b id="statMonth">0</b></div><div class="stat"><span>Departamentos</span><b id="statDepartments">0</b></div><div class="stat"><span>Responsáveis ativos</span><b id="statPeople">0</b></div></div>
  <div class="charts"><div class="panel"><h3>Demandas por departamento</h3><canvas id="deptChart"></canvas></div><div class="panel"><h3>Demandas por mês (últimos 6)</h3><canvas id="monthChart"></canvas></div></div>
- <div class="panel"><div class="p-head"><h2>Registros</h2><div class="exp"><button class="btn sec sm" id="xlsxExport"><svg class="i"><use href="#i-dl"/></svg>Excel</button><button class="btn sec sm" id="csvExport"><svg class="i"><use href="#i-dl"/></svg>CSV</button><button class="btn sec sm" id="pdfExport"><svg class="i"><use href="#i-dl"/></svg>PDF / Imprimir</button></div></div>
+ <div class="panel"><div class="p-head"><h2>Registros</h2><div class="exp"><button class="btn sec sm" id="refreshBtn"><svg class="i"><use href="#i-refresh"/></svg>Atualizar</button><button class="btn sec sm" id="xlsxExport"><svg class="i"><use href="#i-dl"/></svg>Excel</button><button class="btn sec sm" id="csvExport"><svg class="i"><use href="#i-dl"/></svg>CSV</button><button class="btn sec sm" id="pdfExport"><svg class="i"><use href="#i-dl"/></svg>PDF / Imprimir</button></div></div>
  <div class="filters"><div class="search"><svg class="i"><use href="#i-search"/></svg><input id="search" placeholder="Pesquisar demanda ou descrição" aria-label="Pesquisar"></div><select id="filterResponsible" aria-label="Responsável"><option value="">Todos os responsáveis</option></select><select id="filterDept" aria-label="Departamento"><option value="">Todos os departamentos</option></select><input id="filterFrom" type="date" title="De" aria-label="De"><input id="filterTo" type="date" title="Até" aria-label="Até"></div>
  <div class="tw"><table><thead><tr><th>Data</th><th>Demanda</th><th>Responsável</th><th>Departamento</th><th class="th-act"></th></tr></thead><tbody id="tableBody"></tbody></table></div>
  <div class="t-foot"><span id="countLabel" class="small muted"></span><button class="btn ghost sm" id="clearFilters">Limpar filtros</button></div></div>
@@ -189,11 +192,26 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
   <div class="small muted" id="stCap"></div>
   <div class="tw" style="margin-top:16px"><table style="min-width:0"><thead><tr><th>Coleção</th><th>Documentos</th><th>Tamanho estimado</th></tr></thead><tbody id="stRows"></tbody></table></div>
   <div class="help" style="margin-top:12px">Valor estimado a partir dos dados carregados, incluindo uma margem para índices.</div></div>
+ <div class="panel"><div class="p-head"><h2>Leituras do banco</h2></div>
+  <div class="big" id="rdToday">0</div><div class="small muted">leituras feitas por este aparelho hoje (estimativa). O plano gratuito permite 50 mil por dia, somando todos os aparelhos. O dia vira à meia-noite do horário do Pacífico (04h ou 05h em Brasília).</div>
+  <div class="small muted" id="rdSync" style="margin-top:8px"></div>
+  <div class="exp" style="margin-top:14px"><button class="btn sec" id="fullReload"><svg class="i"><use href="#i-refresh"/></svg>Recarregar tudo do servidor</button></div>
+  <div class="help" style="margin-top:12px">Normalmente não é preciso: o sistema guarda os registros neste aparelho e busca só o que mudou. Recarregar tudo lê todos os registros de novo.</div></div>
  <div class="panel warn"><div class="p-head"><h2>Apagar demandas por período</h2></div>
   <div class="small muted">Apaga todas as demandas com data de realização dentro do período escolhido. Não dá para desfazer, então baixe o backup antes.</div>
   <div class="range"><div><label for="stFrom">De</label><input id="stFrom" type="date"></div><div><label for="stTo">Até</label><input id="stTo" type="date"></div></div>
   <div id="delPreview" class="small muted">Escolha as duas datas para ver quantas demandas entram no período.</div>
   <div class="exp"><button class="btn sec" id="delBackup" disabled><svg class="i"><use href="#i-dl"/></svg>Baixar backup (CSV)</button><button class="btn danger" id="delStart" disabled><svg class="i"><use href="#i-trash"/></svg>Apagar demandas do período</button></div></div>
+</section>
+
+<section id="accountsView" class="view hidden">
+ <div class="ph"><h1>Contas</h1><p>Quem pode entrar no sistema e com qual nível de acesso.</p></div>
+ <div class="panel"><div class="p-head"><h2>Adicionar conta</h2></div>
+  <div class="add-row"><input id="accEmail" type="email" placeholder="email@exemplo.com" aria-label="E-mail da conta Google" autocomplete="off"><input id="accName" placeholder="Nome de exibição (opcional)" aria-label="Nome de exibição" autocomplete="off"><select id="accRole" aria-label="Nível"></select><button class="btn" id="accAdd">Adicionar</button></div>
+  <div class="help">A pessoa entra com a conta Google deste e-mail.</div></div>
+ <div class="panel"><div class="p-head"><h2>Contas com acesso <span id="accCount" class="muted small"></span></h2><button class="btn ghost sm" id="accReload"><svg class="i"><use href="#i-refresh"/></svg>Atualizar</button></div>
+  <div class="tw"><table style="min-width:0"><thead><tr><th>Conta</th><th>Nível</th><th>Situação</th><th class="th-act"></th></tr></thead><tbody id="accRows"></tbody></table></div>
+  <div class="help" style="margin-top:12px"><b>Usuário</b> registra e edita demandas. <b>Admin</b> também gerencia responsáveis, apaga demandas e usa Armazenamento. <b>Boss</b> também gerencia contas. <b>Admin fixo</b> é um boss que só pode ser criado, alterado ou removido direto no Firebase.</div></div>
 </section>
 </main></div>
 
@@ -212,7 +230,7 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,collection,getDocs,doc,getDoc,setDoc,addDoc,updateDoc,deleteDoc,query,orderBy,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getFirestore,collection,getDocs,doc,getDoc,setDoc,addDoc,updateDoc,deleteDoc,writeBatch,onSnapshot,query,where,Timestamp,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig = {
     apiKey: "AIzaSyB2BuPD9rpPJydvpKvpuqD1qtbloctXkfw",
     authDomain: "sgd-c-677b0.firebaseapp.com",
@@ -226,7 +244,9 @@ provider.setCustomParameters({prompt:"select_account"});
 const $=id=>document.getElementById(id),C=n=>collection(db,n),D=(c,id)=>doc(db,c,id),norm=s=>String(s||"").trim().replace(/\s+/g," ").toLocaleLowerCase("pt-BR"),clean=s=>String(s||"").trim().replace(/\s+/g," ");
 const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt=d=>d?d.split("-").reverse().join("/"):"—",today=()=>new Date().toLocaleDateString("en-CA"),byName=(a,b)=>a.localeCompare(b,"pt-BR");
-let user=null,admin=false,demands=[],people=[],rawPeople=[],depts=[];
+/* níveis de conta (campo role em allowlist/{email}); o que vale é o número do nível */
+const LV={user:1,admin:2,boss:3,"admin-non-removable":4},RL={user:"Usuário",admin:"Admin",boss:"Boss","admin-non-removable":"Admin fixo"};
+let user=null,role="user",admin=false,boss=false,demands=[],people=[],rawPeople=[],depts=[],accounts=null;
 function toast(s){let el=document.createElement("div");el.className="toast";el.textContent=s;document.body.append(el);setTimeout(()=>el.remove(),3800)}
 
 /* logo do menu: tenta outras extensões se o .png não existir */
@@ -240,16 +260,144 @@ document.querySelectorAll(".theme-btn").forEach(b=>b.onclick=()=>setTheme(root.d
 /* acesso */
 $("date").value=today();
 $("googleLogin").onclick=async()=>{try{$("loginMessage").textContent="";await signInWithPopup(auth,provider)}catch(e){$("loginMessage").textContent="Não foi possível entrar: "+e.message}};
-$("logout").onclick=()=>signOut(auth);
-onAuthStateChanged(auth,async u=>{if(!u){root.dataset.theme="light";$("loginView").classList.remove("hidden");$("mainView").classList.add("hidden");return}user=u;try{let allow=await getDoc(D("allowlist",u.email.toLowerCase()));if(!allow.exists()||allow.data().active===false){await signOut(auth);$("loginMessage").textContent="Este e-mail não está autorizado. Solicite acesso ao administrador.";return}admin=allow.data().role==="admin";root.dataset.theme=pref;$("loginView").classList.add("hidden");$("mainView").classList.remove("hidden");$("profileName").textContent=u.displayName||u.email;$("profilePhoto").src=u.photoURL||"";document.querySelectorAll(".admin-only").forEach(b=>b.classList.toggle("hidden",!admin));await loadAll()}catch(e){toast("Não foi possível verificar o acesso: "+e.message);await signOut(auth)}});
+$("logout").onclick=async()=>{await cacheDel();signOut(auth)};
+onAuthStateChanged(auth,async u=>{if(!u){stopLive();user=null;role="user";admin=boss=false;accounts=null;loaded=false;dmap.clear();demands=[];rawPeople=[];depts=[];people=[];root.dataset.theme="light";$("loginView").classList.remove("hidden");$("mainView").classList.add("hidden");return}user=u;try{let allow=await getDoc(D("allowlist",u.email.toLowerCase()));countReads(1);if(!allow.exists()||allow.data().active!==true){await signOut(auth);$("loginMessage").textContent="Este e-mail não está autorizado. Solicite acesso ao administrador.";return}root.dataset.theme=pref;$("loginView").classList.add("hidden");$("mainView").classList.remove("hidden");setProfile(allow.data());$("profilePhoto").src=u.photoURL||"";accessAt=Date.now();applyRole(LV[allow.data().role]?allow.data().role:"user");showView("newView");await loadAll()}catch(e){toast("Não foi possível verificar o acesso: "+e.message);await signOut(auth)}});
 
 /* dados */
-async function loadAll(){try{const [ds,ps,dep]=await Promise.all([getDocs(query(C("demands"),orderBy("date","desc"))),getDocs(C("responsibles")),getDocs(C("departments"))]);demands=ds.docs.map(d=>({id:d.id,...d.data()}));rawPeople=ps.docs.map(d=>({id:d.id,...d.data()}));people=rawPeople.filter(p=>p.active!==false).sort((a,b)=>byName(a.name,b.name));depts=dep.docs.map(d=>({id:d.id,...d.data()}));fillSelectors();renderTable();renderDashboard();renderAdmin();renderStorage()}catch(e){toast("Erro ao carregar: "+e.message)}}
+/* ===== leitura eficiente =====
+   O Firestore cobra 1 leitura por documento lido. Em vez de reler tudo a cada ação:
+   - as demandas ficam num cache local (IndexedDB) e, a cada abertura, buscamos só o que mudou (campo updatedAt);
+   - exclusões chegam pelos documentos "purges" (cada um lista até 500 ids apagados);
+   - depois de gravar, a lista local é atualizada sem ler nada do servidor;
+   - uma vez por semana (ou pelo botão em Armazenamento) o cache é refeito do zero, por segurança. */
+const CK="sgd-cache-v1:"+firebaseConfig.projectId,MARGIN=10e3,FULL_EVERY=7*864e5,POLL=60e3,IDLE=15*60e3,RECHECK=5*60e3,dmap=new Map();
+let lastSync=0,fullAt=0,syncedAt=0,savedAt=0,syncing=null,loaded=false,purgesOff=false,syncFail=false,dbp=null,ct=0,pollT=0,lastAct=Date.now(),accessAt=0,unsubs=[];
+const idb=()=>dbp||(dbp=new Promise((ok,no)=>{const r=indexedDB.open("sgd",1);r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)}));
+const kv=(mode,fn)=>idb().then(d=>new Promise((ok,no)=>{const t=d.transaction("kv",mode),r=fn(t.objectStore("kv"));t.oncomplete=()=>ok(r.result);t.onerror=t.onabort=()=>no(t.error)}));
+const cacheGet=()=>kv("readonly",s=>s.get(CK)).catch(()=>null),cacheSet=v=>kv("readwrite",s=>s.put(v,CK)).catch(()=>{}),cacheDel=()=>{clearTimeout(ct);return kv("readwrite",s=>s.delete(CK)).catch(()=>{})};
+const saveCacheSoon=()=>{clearTimeout(ct);ct=setTimeout(()=>cacheSet({v:1,last:lastSync,fullAt,demands:[...dmap.values()]}),800)};
+/* contador de leituras deste aparelho (o dia do Firestore vira à meia-noite do Pacífico) */
+const pac=()=>new Date().toLocaleDateString("en-CA",{timeZone:"America/Los_Angeles"});
+function countReads(n){try{let o=JSON.parse(localStorage.getItem("sgd-reads")||"{}");if(o.d!==pac())o={d:pac(),n:0};o.n+=n;localStorage.setItem("sgd-reads",JSON.stringify(o))}catch(e){}}
+const readsToday=()=>{try{const o=JSON.parse(localStorage.getItem("sgd-reads")||"{}");return o.d===pac()?o.n:0}catch(e){return 0}};
+const rdocs=async q=>{const s=await getDocs(q);countReads(Math.max(1,s.size));return s};
+const ms=t=>t&&t.toMillis?t.toMillis():typeof t==="number"?t:0;
+const fromSnap=d=>{const x={id:d.id,...d.data()};x.createdAt=ms(x.createdAt);x.updatedAt=ms(x.updatedAt);return x};
+const rebuild=()=>{demands=[...dmap.values()].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.createdAt||0)-(a.createdAt||0))};
+function putLocal(id,x){dmap.set(id,{...x,id});rebuild();saveCacheSoon()}
+/* cache só é usado se estiver íntegro e recente; qualquer dúvida => leitura completa (nunca mostra dado estragado) */
+const okCache=(c,t)=>!!c&&c.v===1&&Array.isArray(c.demands)&&typeof c.last==="number"&&typeof c.fullAt==="number"&&t-c.fullAt>=0&&t-c.fullAt<FULL_EVERY&&c.demands.every(x=>x&&typeof x.id==="string");
+/* marcador da próxima busca: nunca anda para trás, nunca passa de (agora - 10s) para pegar gravações que chegaram
+   ao servidor fora de ordem, e nunca fica mais de 5 min atrás do que já vimos (protege de relógio errado no aparelho) */
+const nextCursor=(seen,t0,prev)=>Math.max(0,prev,seen-5*60e3,Math.min(seen,t0-MARGIN));
+/* devolve true se algo mudou na lista local */
+function syncDemands(force){
+  if(syncing)return syncing;
+  return syncing=(async()=>{
+    try{
+      const t0=Date.now();let changed=false,seen=0,prev=0;
+      if(force)loaded=false;
+      if(!loaded){const c=force?null:await cacheGet();if(okCache(c,t0)){dmap.clear();c.demands.forEach(x=>dmap.set(x.id,x));lastSync=c.last;fullAt=c.fullAt;loaded=true;changed=true}}
+      if(loaded&&t0-fullAt>=FULL_EVERY)loaded=false;
+      if(loaded){
+        seen=prev=lastSync;
+        const since=Timestamp.fromMillis(lastSync);
+        const [a,p]=await Promise.all([
+          rdocs(query(C("demands"),where("updatedAt",">=",since))),
+          purgesOff?null:rdocs(query(C("purges"),where("at",">=",since))).catch(e=>{if(e.code==="permission-denied"){purgesOff=true;toast("Atenção: as regras novas do Firestore ainda não foram publicadas. Exclusões feitas por outras pessoas só aparecem em Armazenamento > Recarregar tudo.");return null}throw e})]);
+        a.docs.forEach(d=>{const x=fromSnap(d),o=dmap.get(x.id);if(!o||o.updatedAt!==x.updatedAt)changed=true;dmap.set(x.id,x);seen=Math.max(seen,x.updatedAt)});
+        if(p)p.docs.forEach(d=>{const v=d.data();(v.ids||[]).forEach(i=>{if(dmap.delete(i))changed=true});seen=Math.max(seen,ms(v.at))});
+      }else{
+        const s=await rdocs(C("demands"));dmap.clear();
+        s.docs.forEach(d=>{const x=fromSnap(d);dmap.set(x.id,x);seen=Math.max(seen,x.updatedAt)});
+        fullAt=t0;changed=true;
+      }
+      lastSync=nextCursor(seen,t0,prev);loaded=true;
+      if(changed)rebuild();
+      syncedAt=Date.now();
+      if(changed||syncedAt-savedAt>10*60e3){savedAt=syncedAt;await cacheSet({v:1,last:lastSync,fullAt,demands:[...dmap.values()]})}
+      return changed;
+    }finally{syncing=null}
+  })();
+}
+/* atualização em segundo plano: só redesenha a tela se algo mudou; falha de rede não incomoda, só avisa no rodapé da tabela */
+async function syncQuick(silent){
+  if(!user)return;
+  try{const ch=await syncDemands();syncFail=false;if(ch)refreshUI();else renderCount()}
+  catch(e){syncFail=true;renderCount();if(e.code==="permission-denied")recheckAccess();else if(!silent)toast("Não foi possível atualizar: "+e.message)}
+}
+
+/* ===== ao vivo =====
+   - a cada 60 s (aba visível e pessoa ativa nos últimos 15 min) busca só o que mudou: ~2 leituras + os registros alterados;
+   - ao voltar para a aba, ao voltar a internet ou após ficar parado, atualiza na hora;
+   - a cada 5 min confere se a conta continua ativa e com o mesmo nível;
+   - responsáveis e departamentos são ouvidos em tempo real (poucas dezenas de documentos). */
+function wake(){lastAct=Date.now();if(!user)return;if(Date.now()-syncedAt>30e3){if(Date.now()-accessAt>RECHECK)recheckAccess();syncQuick(true)}}
+["pointerdown","keydown","touchstart"].forEach(ev=>addEventListener(ev,()=>{if(Date.now()-lastAct>IDLE)wake();else lastAct=Date.now()},{passive:true}));
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)wake()});
+addEventListener("online",wake);
+function livePoll(){clearTimeout(pollT);pollT=setTimeout(async()=>{if(user&&!document.hidden&&Date.now()-lastAct<IDLE){if(!unsubs.length)startLists().then(refreshUI,()=>{});if(Date.now()-accessAt>RECHECK)await recheckAccess();if(user)await syncQuick(true)}livePoll()},POLL)}
+function stopLive(){clearTimeout(pollT);unsubs.forEach(f=>{try{f()}catch(e){}});unsubs=[]}
+function startLists(){
+  if(unsubs.length)return Promise.resolve();
+  const sub=(name,set)=>new Promise((ok,no)=>{
+    let first=true;
+    unsubs.push(onSnapshot(C(name),s=>{
+      set(s.docs.map(d=>({id:d.id,...d.data()})));
+      if(!(s.metadata&&s.metadata.hasPendingWrites))countReads(Math.max(1,s.docChanges().length));
+      if(first){first=false;ok()}else refreshUI()
+    },e=>{if(first){first=false;no(e)}else if(e.code==="permission-denied")recheckAccess()}))
+  });
+  return Promise.all([sub("responsibles",a=>{rawPeople=a}),sub("departments",a=>{depts=a})]).catch(e=>{unsubs.forEach(f=>{try{f()}catch(_){}});unsubs=[];throw e});
+}
+/* saudação "Olá, <nome cadastrado em Contas>!" no topo de Registrar demanda (sem nome cadastrado, usa o da conta Google).
+   O rodapé do menu continua mostrando a conta Google, para identificar a conta mesmo quando há nomes iguais. */
+function setProfile(d){const nm=(d&&typeof d.name==="string"&&d.name.trim())||"";$("hello").textContent="Olá, "+(nm||user.displayName||user.email.split("@")[0]);const el=$("profileName");el.textContent=user.displayName||user.email;el.title=user.email}
+function applyRole(r){
+  role=r;admin=LV[r]>=2;boss=LV[r]>=3;$("profileRole").textContent=RL[r];
+  document.querySelectorAll(".admin-only").forEach(b=>b.classList.toggle("hidden",!admin));
+  document.querySelectorAll(".boss-only").forEach(b=>b.classList.toggle("hidden",!boss));
+  if(!boss)accounts=null;
+  const v=document.querySelector(".view:not(.hidden)");
+  if(v&&((!admin&&(v.id==="adminView"||v.id==="storageView"))||(!boss&&v.id==="accountsView")))showView("newView");
+}
+async function endSession(msg){await cacheDel();try{await signOut(auth)}catch(e){}$("loginMessage").textContent=msg}
+async function recheckAccess(){
+  if(!user)return;accessAt=Date.now();
+  try{
+    const s=await getDoc(D("allowlist",user.email.toLowerCase()));countReads(1);
+    if(!s.exists()||s.data().active!==true){await endSession("Seu acesso foi removido ou desativado pela administração.");return}
+    setProfile(s.data());
+    const r=LV[s.data().role]?s.data().role:"user";
+    if(r!==role){applyRole(r);refreshUI();toast("Seu nível de acesso agora é: "+RL[r]+".")}
+  }catch(e){/* sem rede agora: tenta de novo no próximo ciclo */}
+}
+/* apaga em lotes de 18 (limite de acessos das regras por lote) e registra o que foi apagado em "purges" */
+async function removeDemands(ids,onStep){
+  const pend=[],flush=async all=>{while(pend.length>=(all?1:400))await addDoc(C("purges"),{ids:pend.splice(0,400),at:serverTimestamp(),by:user.email})};
+  const del=async g=>{const b=writeBatch(db);g.forEach(id=>b.delete(D("demands",id)));await b.commit();g.forEach(id=>{dmap.delete(id);pend.push(id)})};
+  try{
+    for(let i=0;i<ids.length;i+=54){
+      const part=ids.slice(i,i+54),groups=[];for(let j=0;j<part.length;j+=18)groups.push(part.slice(j,j+18));
+      const res=await Promise.allSettled(groups.map(del));
+      const bad=res.find(r=>r.status==="rejected");if(bad)throw bad.reason;
+      onStep&&onStep(Math.min(i+54,ids.length));await flush()
+    }
+  }finally{
+    rebuild();saveCacheSoon();
+    try{await flush(true)}catch(e){toast("Apagado, mas o aviso aos outros aparelhos falhou. Eles se acertam na próxima recarga completa.")}
+  }
+}
+async function loadAll(force){
+  try{await Promise.all([syncDemands(force),startLists()]);syncFail=false}catch(e){syncFail=true;toast("Erro ao carregar: "+e.message)}
+  accessAt=Date.now();refreshUI();livePoll();
+}
+function refreshUI(){people=rawPeople.filter(p=>p.active!==false).sort((a,b)=>byName(a.name,b.name));fillSelectors();renderTable();renderDashboard();renderAdmin();renderStorage()}
 /* departamentos = cadastrados + já usados em demandas (sem duplicar) */
 function deptNames(){const m=new Map();[...depts.map(d=>d.name),...demands.map(x=>x.department)].forEach(n=>{n=clean(n);if(n&&!m.has(norm(n)))m.set(norm(n),n)});return [...m.values()].sort(byName)}
-function options(sel,arr,ph){let old=sel.value;sel.innerHTML=`<option value="">${ph}</option>`+arr.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");if(arr.includes(old))sel.value=old}
+function options(sel,arr,ph){const html=`<option value="">${ph}</option>`+arr.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");if(sel.dataset.sig===html)return;/* lista igual: não mexe (não fecha um menu aberto) */let old=sel.value;sel.innerHTML=html;sel.dataset.sig=html;if(arr.includes(old))sel.value=old}
 function fillSelectors(){const n=people.map(p=>p.name);options($("responsible"),n,"Selecione");options($("editResponsible"),n,"Selecione");options($("filterResponsible"),n,"Todos os responsáveis");options($("filterDept"),deptNames(),"Todos os departamentos")}
-async function saveDept(value){value=clean(value);if(!value)return;let id=norm(value);if(!depts.some(x=>norm(x.name)===id)){await setDoc(D("departments",id),{name:value,createdBy:user.uid,createdAt:serverTimestamp()});depts.push({id,name:value})}}
+async function saveDept(value){value=clean(value);if(!value)return;let n=norm(value),id=n.replace(/\//g,"∕");if(!depts.some(x=>norm(x.name)===n)){await setDoc(D("departments",id),{name:value,createdBy:user.uid,createdAt:serverTimestamp()});if(!depts.some(x=>x.id===id))depts.push({id,name:value})}}
 
 /* sugestões: a lista é lida na hora (função), por isso nunca fica desatualizada */
 function suggest(input,list,get){const show=()=>{const v=norm(input.value),m=get().filter(x=>!v||norm(x).includes(v)).slice(0,8);list.innerHTML="";m.forEach(x=>{const b=document.createElement("button");b.type="button";b.textContent=x;b.onmousedown=e=>{e.preventDefault();input.value=x;list.classList.add("hidden")};list.append(b)});list.classList.toggle("hidden",!m.length||(m.length===1&&norm(m[0])===v))};input.addEventListener("input",show);input.addEventListener("focus",show);input.addEventListener("blur",()=>list.classList.add("hidden"));input.addEventListener("keydown",e=>{if(e.key==="Escape")list.classList.add("hidden")})}
@@ -258,20 +406,28 @@ suggest($("editDepartment"),$("editDeptSuggest"),deptNames);
 suggest($("demandName"),$("nameSuggest"),()=>[...new Set(demands.map(x=>x.name).filter(Boolean))]);
 
 /* registrar */
-$("demandForm").onsubmit=async e=>{e.preventDefault();let name=clean($("demandName").value),responsible=$("responsible").value,date=$("date").value,department=clean($("department").value);if(!name||!responsible||!date||!department){toast("Preencha todos os campos obrigatórios.");return}let b=$("saveDemand");b.disabled=true;b.textContent="Salvando…";try{await saveDept(department);let data={name,detail:clean($("detail").value),responsible,date,department,createdBy:user.uid,createdByEmail:user.email,createdByName:user.displayName||user.email,createdAt:serverTimestamp(),updatedAt:serverTimestamp()};let ref=await addDoc(C("demands"),data);toast("Demanda salva.");$("demandForm").reset();$("date").value=today();await loadAll()}catch(err){toast("Erro ao salvar: "+err.message)}finally{b.disabled=false;b.textContent="Salvar demanda"}};
+$("demandForm").onsubmit=async e=>{e.preventDefault();let name=clean($("demandName").value),responsible=$("responsible").value,date=$("date").value,department=clean($("department").value);if(!name||!responsible||!date||!department){toast("Preencha todos os campos obrigatórios.");return}let b=$("saveDemand");b.disabled=true;b.textContent="Salvando…";try{await saveDept(department);let data={name,detail:clean($("detail").value),responsible,date,department,createdBy:user.uid,createdByEmail:user.email,createdByName:user.displayName||user.email,createdAt:serverTimestamp(),updatedAt:serverTimestamp()};let ref=await addDoc(C("demands"),data);putLocal(ref.id,{...data,createdAt:Date.now(),updatedAt:Date.now()});toast("Demanda salva.");$("demandForm").reset();$("date").value=today();refreshUI()}catch(err){toast("Erro ao salvar: "+err.message)}finally{b.disabled=false;b.textContent="Salvar demanda"}};
 
 /* tabela */
 const FIL=["search","filterResponsible","filterDept","filterFrom","filterTo"];
 function getFiltered(){let s=norm($("search").value),p=$("filterResponsible").value,d=$("filterDept").value,f=$("filterFrom").value,t=$("filterTo").value;return demands.filter(x=>(!s||norm(x.name+" "+x.detail).includes(s))&&(!p||x.responsible===p)&&(!d||x.department===d)&&(!f||x.date>=f)&&(!t||x.date<=t))}
 FIL.forEach(id=>$(id).addEventListener("input",renderTable));
 $("clearFilters").onclick=()=>{FIL.forEach(id=>$(id).value="");renderTable()};
-function renderTable(){let list=getFiltered();$("tableBody").innerHTML=list.length?list.map(x=>`<tr><td class="nw">${fmt(x.date)}</td><td><div class="t1">${esc(x.name)}</div>${x.detail?`<div class="t2">${esc(x.detail)}</div>`:""}</td><td>${esc(x.responsible)||"—"}</td><td>${x.department?`<span class="tag">${esc(x.department)}</span>`:"—"}</td><td class="td-act"><div class="row-act"><button class="btn ghost sm" data-edit="${x.id}"><svg class="i"><use href="#i-edit"/></svg>Editar</button>${admin?`<button class="btn dg sm" data-del="${x.id}" aria-label="Excluir"><svg class="i"><use href="#i-trash"/></svg></button>`:""}</div></td></tr>`).join(""):'<tr><td colspan="5" class="empty">Nenhuma demanda encontrada. Ajuste os filtros ou registre uma nova demanda.</td></tr>';$("countLabel").textContent=`${list.length} de ${demands.length} registro(s)`}
-$("tableBody").onclick=async e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.edit){openEdit(demands.find(x=>x.id===b.dataset.edit))}else if(b.dataset.del&&admin){const x=demands.find(d=>d.id===b.dataset.del);if(x&&confirm("Excluir este registro?")){await deleteDoc(D("demands",x.id));toast("Registro excluído.");await loadAll()}}};
+function renderTable(){let list=getFiltered();$("tableBody").innerHTML=list.length?list.map(x=>`<tr><td class="nw">${fmt(x.date)}</td><td><div class="t1">${esc(x.name)}</div>${x.detail?`<div class="t2">${esc(x.detail)}</div>`:""}</td><td>${esc(x.responsible)||"—"}</td><td>${x.department?`<span class="tag">${esc(x.department)}</span>`:"—"}</td><td class="td-act"><div class="row-act"><button class="btn ghost sm" data-edit="${x.id}"><svg class="i"><use href="#i-edit"/></svg>Editar</button>${admin?`<button class="btn dg sm" data-del="${x.id}" aria-label="Excluir"><svg class="i"><use href="#i-trash"/></svg></button>`:""}</div></td></tr>`).join(""):'<tr><td colspan="5" class="empty">Nenhuma demanda encontrada. Ajuste os filtros ou registre uma nova demanda.</td></tr>';renderCount(list)}
+function renderCount(list=getFiltered()){$("countLabel").textContent=`${list.length} de ${demands.length} registro(s)`+(syncFail?" · não foi possível atualizar, tentando de novo":syncedAt?` · atualizado às ${new Date(syncedAt).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`:"")}
+$("tableBody").onclick=async e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.edit){openEdit(demands.find(x=>x.id===b.dataset.edit))}else if(b.dataset.del&&admin){const x=demands.find(d=>d.id===b.dataset.del);if(x&&confirm("Excluir este registro?")){try{await removeDemands([x.id]);toast("Registro excluído.")}catch(err){toast("Erro ao excluir: "+err.message)}refreshUI()}}};
 
 /* edição */
-function openEdit(x){if(!x)return;$("editId").value=x.id;$("editName").value=x.name||"";$("editDetail").value=x.detail||"";$("editResponsible").value=x.responsible;$("editDate").value=x.date;$("editDepartment").value=x.department||"";$("editModal").classList.remove("hidden")}
+const withTimeout=(p,t)=>Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error("timeout")),t))]);
+async function openEdit(x){if(!x)return;
+  /* antes de editar, lê o registro atual (1 leitura): evita editar em cima de uma versão velha ou de algo já apagado */
+  try{const s=await withTimeout(getDoc(D("demands",x.id)),4000);countReads(1);
+    if(!s.exists()){dmap.delete(x.id);rebuild();saveCacheSoon();refreshUI();toast("Este registro foi apagado por outra pessoa.");return}
+    const f=fromSnap(s);if(f.updatedAt!==x.updatedAt){dmap.set(f.id,f);rebuild();saveCacheSoon();refreshUI()}x=f}
+  catch(e){/* sem rede: abre com a cópia local */}
+  $("editId").value=x.id;$("editName").value=x.name||"";$("editDetail").value=x.detail||"";$("editResponsible").value=x.responsible;$("editDate").value=x.date;$("editDepartment").value=x.department||"";$("editModal").classList.remove("hidden")}
 $("cancelEdit").onclick=()=>$("editModal").classList.add("hidden");
-$("editForm").onsubmit=async e=>{e.preventDefault();let id=$("editId").value,data={name:clean($("editName").value),detail:clean($("editDetail").value),responsible:$("editResponsible").value,date:$("editDate").value,department:clean($("editDepartment").value),updatedAt:serverTimestamp()};try{await saveDept(data.department);await updateDoc(D("demands",id),data);$("editModal").classList.add("hidden");toast("Alterações salvas.");await loadAll()}catch(err){toast("Erro ao salvar: "+err.message)}};
+$("editForm").onsubmit=async e=>{e.preventDefault();let id=$("editId").value,data={name:clean($("editName").value),detail:clean($("editDetail").value),responsible:$("editResponsible").value,date:$("editDate").value,department:clean($("editDepartment").value),updatedAt:serverTimestamp()};try{await saveDept(data.department);await updateDoc(D("demands",id),data);putLocal(id,{...dmap.get(id),...data,updatedAt:Date.now()});$("editModal").classList.add("hidden");toast("Alterações salvas.");refreshUI()}catch(err){if(err.code==="not-found"){dmap.delete(id);rebuild();saveCacheSoon();$("editModal").classList.add("hidden");refreshUI();toast("Este registro foi apagado por outra pessoa.")}else toast("Erro ao salvar: "+err.message)}};
 
 /* painel */
 function renderDashboard(){let f=getFiltered(),month=today().slice(0,7);$("statTotal").textContent=demands.length;$("statMonth").textContent=demands.filter(x=>x.date?.startsWith(month)).length;$("statDepartments").textContent=new Set(demands.map(x=>x.department).filter(Boolean)).size;$("statPeople").textContent=new Set(demands.map(x=>x.responsible).filter(Boolean)).size;drawBars($("deptChart"),countBy(f,"department"),true);let now=new Date(),ms=[];for(let i=5;i>=0;i--){let m=new Date(now.getFullYear(),now.getMonth()-i,1);ms.push({label:m.toLocaleDateString("pt-BR",{month:"short"}).replace(".",""),value:demands.filter(x=>x.date?.startsWith(m.toLocaleDateString("en-CA").slice(0,7))).length})}drawBars($("monthChart"),ms,false)}
@@ -285,17 +441,46 @@ const HEAD=["Data","Nome da demanda","Descrição","Responsável","Departamento"
 function exportRows(list=getFiltered()){return list.map(x=>({[HEAD[0]]:fmt(x.date),[HEAD[1]]:x.name,[HEAD[2]]:x.detail||"",[HEAD[3]]:x.responsible,[HEAD[4]]:x.department,[HEAD[5]]:x.createdByName||x.createdByEmail||""}))}
 function downloadCsv(list,file){let rows=exportRows(list),csv="\uFEFF"+[HEAD,...rows.map(r=>HEAD.map(h=>r[h]))].map(row=>row.map(v=>'"'+String(v??"").replaceAll('"','""')+'"').join(";")).join("\r\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download=file;a.click();URL.revokeObjectURL(a.href)}
 $("csvExport").onclick=()=>downloadCsv(getFiltered(),"SGD-demandas.csv");
-$("xlsxExport").onclick=()=>{if(!window.XLSX){toast("A biblioteca do Excel ainda está carregando.");return}let ws=XLSX.utils.json_to_sheet(exportRows(),{header:HEAD}),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Demandas");XLSX.writeFile(wb,"SGD-demandas.xlsx")};
+/* Excel formatado. A biblioteca (ExcelJS) só é baixada quando alguém clica em Excel. */
+let xlP=null;
+const loadExcelJS=()=>window.ExcelJS?Promise.resolve():(xlP||(xlP=new Promise((ok,no)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js";s.onload=ok;s.onerror=()=>{xlP=null;s.remove();no(new Error("não foi possível baixar a biblioteca do Excel (sem internet?)."))};document.head.append(s)})));
+async function downloadXlsx(list,file){
+  const wb=new ExcelJS.Workbook();wb.creator="SGD";wb.title="Demandas concluídas";wb.created=new Date();
+  const ws=wb.addWorksheet("Demandas",{
+    views:[{state:"frozen",ySplit:1,showGridLines:false}],
+    pageSetup:{paperSize:9,orientation:"landscape",fitToPage:true,fitToWidth:1,fitToHeight:0,printTitlesRow:"1:1",margins:{left:.4,right:.4,top:.6,bottom:.6,header:.3,footer:.3}},
+    headerFooter:{oddFooter:"&LSGD · Demandas&RPágina &P de &N"}});
+  ws.columns=[{width:13},{width:38},{width:62},{width:24},{width:24},{width:28}];
+  ws.addRow(HEAD);
+  const day=s=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||"");return m?new Date(Date.UTC(+m[1],+m[2]-1,+m[3])):null};
+  list.forEach(x=>ws.addRow([day(x.date)||x.date||"",x.name||"",x.detail||"",x.responsible||"",x.department||"",x.createdByName||x.createdByEmail||""]));
+  const side=c=>({style:"thin",color:{argb:c}}),box=c=>({top:side(c),left:side(c),bottom:side(c),right:side(c)});
+  const hr=ws.getRow(1);hr.height=26;
+  hr.eachCell(c=>{c.font={name:"Calibri",size:11,bold:true,color:{argb:"FFFFFFFF"}};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF6A31D6"}};c.alignment={vertical:"middle",horizontal:"left",indent:1};c.border=box("FF5522B8")});
+  for(let r=2;r<=ws.rowCount;r++)ws.getRow(r).eachCell({includeEmpty:true},(c,col)=>{c.font={name:"Calibri",size:11,bold:col===2,color:{argb:"FF151822"}};c.alignment={vertical:"top",wrapText:true,horizontal:col===1?"center":"left",indent:col===1?0:1};c.border=box("FFE2E5EC");if(c.value instanceof Date)c.numFmt="dd/mm/yyyy"});
+  ws.autoFilter={from:{row:1,column:1},to:{row:ws.rowCount,column:6}};
+  const buf=await wb.xlsx.writeBuffer(),a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));a.download=file;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+}
+$("xlsxExport").onclick=async()=>{
+  const list=getFiltered();if(!list.length){toast("Não há demandas para exportar com os filtros atuais.");return}
+  const b=$("xlsxExport"),html=b.innerHTML;b.disabled=true;b.textContent="Gerando…";
+  try{await loadExcelJS();await downloadXlsx(list,`SGD-demandas-${today()}.xlsx`)}catch(e){toast("Não foi possível gerar o Excel: "+e.message+" Use o CSV por enquanto.")}finally{b.disabled=false;b.innerHTML=html}
+};
 $("pdfExport").onclick=()=>window.print();
 
 /* navegação */
-document.querySelectorAll(".nav button[data-view]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));$(b.dataset.view).classList.remove("hidden");if(b.dataset.view==="dashboardView"){renderDashboard();renderTable()}if(b.dataset.view==="storageView")renderStorage()});
+function showView(id){document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.view===id));document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));$(id).classList.remove("hidden");if(id==="dashboardView"){renderDashboard();renderTable();if(Date.now()-syncedAt>60e3)syncQuick(true)}if(id==="storageView")renderStorage();if(id==="accountsView")loadAccounts()}
+document.querySelectorAll(".nav button[data-view]").forEach(b=>b.onclick=()=>showView(b.dataset.view));
 
 /* armazenamento */
 const enc=new TextEncoder(),u8=s=>enc.encode(String(s)).length,LIM=2**30;
-function docBytes(col,d){const nm=col.length+String(d.id).length+16;let n=nm+32,ix=0;for(const [k,v] of Object.entries(d)){if(k==="id")continue;const val=typeof v==="string"?u8(v)+1:v&&v.toDate?8:1;n+=u8(k)+1+val;ix+=2*(nm+u8(k)+Math.min(val,1500)+32)}return n+ix}
+function docBytes(col,d){const nm=col.length+String(d.id).length+16;let n=nm+32,ix=0;for(const [k,v] of Object.entries(d)){if(k==="id")continue;const val=typeof v==="string"?u8(v)+1:typeof v==="number"||(v&&v.toDate)?8:1;n+=u8(k)+1+val;ix+=2*(nm+u8(k)+Math.min(val,1500)+32)}return n+ix}
 function fmtB(b){return b<1024?b+" B":b<1048576?(b/1024).toLocaleString("pt-BR",{maximumFractionDigits:1})+" KB":b<LIM?(b/1048576).toLocaleString("pt-BR",{maximumFractionDigits:1})+" MB":(b/LIM).toLocaleString("pt-BR",{maximumFractionDigits:2})+" GB"}
-function renderStorage(){if(!admin)return;const cols=[["demands","Demandas",demands],["responsibles","Responsáveis",rawPeople],["departments","Departamentos",depts]];let total=0,dem=0;const rows=cols.map(([c,l,a])=>{const b=a.reduce((t,d)=>t+docBytes(c,d),0);total+=b;if(c==="demands")dem=b;return `<tr><td>${l}</td><td class="nw">${a.length.toLocaleString("pt-BR")}</td><td class="nw">${fmtB(b)}</td></tr>`}).join("");$("stRows").innerHTML=rows;const pct=total/LIM*100;$("stTotal").textContent=fmtB(total);$("stSub").textContent=`de 1 GiB do plano gratuito (${pct<0.01?"menos de 0,01":pct.toLocaleString("pt-BR",{maximumFractionDigits:2})}% usado)`;$("stBar").style.width=Math.max(pct,.8)+"%";$("stMeter").classList.toggle("hot",pct>=80);$("stCap").textContent=demands.length?`Cabem cerca de ${Math.floor((LIM-total)/(dem/demands.length)).toLocaleString("pt-BR")} demandas novas com o espaço restante.`:"";renderDelPreview()}
+function renderStorage(){if(!admin)return;const cols=[["demands","Demandas",demands],["responsibles","Responsáveis",rawPeople],["departments","Departamentos",depts]];let total=0,dem=0;const rows=cols.map(([c,l,a])=>{const b=a.reduce((t,d)=>t+docBytes(c,d),0);total+=b;if(c==="demands")dem=b;return `<tr><td>${l}</td><td class="nw">${a.length.toLocaleString("pt-BR")}</td><td class="nw">${fmtB(b)}</td></tr>`}).join("");$("stRows").innerHTML=rows;const pct=total/LIM*100;$("stTotal").textContent=fmtB(total);$("stSub").textContent=`de 1 GiB do plano gratuito (${pct<0.01?"menos de 0,01":pct.toLocaleString("pt-BR",{maximumFractionDigits:2})}% usado)`;$("stBar").style.width=Math.max(pct,.8)+"%";$("stMeter").classList.toggle("hot",pct>=80);$("stCap").textContent=demands.length?`Cabem cerca de ${Math.floor((LIM-total)/(dem/demands.length)).toLocaleString("pt-BR")} demandas novas com o espaço restante.`:"";renderReads();renderDelPreview()}
+function renderReads(){$("rdToday").textContent=readsToday().toLocaleString("pt-BR");$("rdSync").textContent=syncedAt?`Última sincronização: ${new Date(syncedAt).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}. Registros guardados neste aparelho: ${dmap.size.toLocaleString("pt-BR")}.`:""}
+$("fullReload").onclick=async()=>{if(!confirm(`Isso lê todos os registros de novo (cerca de ${demands.length.toLocaleString("pt-BR")} leituras). Continuar?`))return;await loadAll(true);toast("Dados recarregados.")};
+$("refreshBtn").onclick=async()=>{const b=$("refreshBtn");b.disabled=true;await loadAll();b.disabled=false};
 const inRange=()=>{const f=$("stFrom").value,t=$("stTo").value;return f&&t&&f<=t?demands.filter(x=>x.date>=f&&x.date<=t):null};
 function renderDelPreview(){const f=$("stFrom").value,t=$("stTo").value,list=inRange(),pv=$("delPreview");$("delBackup").disabled=$("delStart").disabled=!list||!list.length;if(f&&t&&f>t)pv.textContent="A data inicial precisa ser anterior à final.";else if(!list)pv.textContent="Escolha as duas datas para ver quantas demandas entram no período.";else if(!list.length)pv.textContent=`Nenhuma demanda com data de realização entre ${fmt(f)} e ${fmt(t)}.`;else{pv.innerHTML=`<strong>${list.length.toLocaleString("pt-BR")}</strong> demanda(s) entre ${fmt(f)} e ${fmt(t)}.`+(list.length>20000?" O plano gratuito permite 20 mil exclusões por dia.":"")}}
 ["stFrom","stTo"].forEach(id=>$(id).addEventListener("input",renderDelPreview));
@@ -303,13 +488,62 @@ $("delBackup").onclick=()=>{const l=inRange();if(l?.length)downloadCsv(l,`SGD-ba
 $("delStart").onclick=()=>{const l=inRange();if(!l?.length)return;$("delText").textContent=`${l.length.toLocaleString("pt-BR")} demanda(s) entre ${fmt($("stFrom").value)} e ${fmt($("stTo").value)} serão apagadas para sempre.`;$("delConfirm").value="";$("delGo").disabled=true;$("delModal").classList.remove("hidden");$("delConfirm").focus()};
 $("delConfirm").addEventListener("input",()=>$("delGo").disabled=$("delConfirm").value.trim().toUpperCase()!=="APAGAR");
 $("delCancel").onclick=()=>$("delModal").classList.add("hidden");
-$("delGo").onclick=async()=>{if(!admin)return;const l=inRange();if(!l?.length)return;const f=$("stFrom").value,t=$("stTo").value,b=$("delGo");b.disabled=true;$("delCancel").disabled=true;let ok=0;try{for(let i=0;i<l.length;i+=20){await Promise.all(l.slice(i,i+20).map(x=>deleteDoc(D("demands",x.id))));ok+=Math.min(20,l.length-i);b.textContent=`Apagando… ${ok}/${l.length}`}toast(`${ok} demanda(s) apagada(s).`)}catch(e){toast(`Parou após ${ok} exclusão(ões): ${e.message}`)}finally{b.textContent="Apagar definitivamente";$("delCancel").disabled=false;$("delModal").classList.add("hidden");await loadAll()}};
+$("delGo").onclick=async()=>{if(!admin)return;const l=inRange();if(!l?.length)return;const b=$("delGo");b.disabled=true;$("delCancel").disabled=true;try{await removeDemands(l.map(x=>x.id),n=>{b.textContent=`Apagando… ${n}/${l.length}`});toast(`${l.length} demanda(s) apagada(s).`)}catch(e){toast(`Parou após ${l.filter(x=>!dmap.has(x.id)).length} exclusão(ões): ${e.message}`)}finally{b.textContent="Apagar definitivamente";$("delCancel").disabled=false;$("delModal").classList.add("hidden");refreshUI()}};
 
 /* administração */
-$("addPerson").onclick=async()=>{if(!admin)return;let name=clean($("newPerson").value);if(!name)return;if(people.some(p=>norm(p.name)===norm(name))){toast("Esse nome já existe.");return}await addDoc(C("responsibles"),{name,active:true,createdAt:serverTimestamp(),createdBy:user.uid});$("newPerson").value="";toast("Responsável adicionado.");await loadAll()};
+$("addPerson").onclick=async()=>{if(!admin)return;let name=clean($("newPerson").value);if(!name)return;if(people.some(p=>norm(p.name)===norm(name))){toast("Esse nome já existe.");return}try{const ref=await addDoc(C("responsibles"),{name,active:true,createdAt:serverTimestamp(),createdBy:user.uid});if(!rawPeople.some(x=>x.id===ref.id))rawPeople.push({id:ref.id,name,active:true});$("newPerson").value="";toast("Responsável adicionado.");refreshUI()}catch(e){toast("Erro ao adicionar: "+e.message)}};
 function renderAdmin(){if(!admin)return;$("peopleList").innerHTML=people.map(p=>`<div class="admin-row"><span>${esc(p.name)}</span><button class="btn dg sm" data-off="${p.id}">Desativar</button></div>`).join("")||'<div class="empty">Nenhum responsável cadastrado.</div>';$("deptAdminList").innerHTML=deptNames().map(n=>`<div class="admin-row"><span>${esc(n)}</span></div>`).join("")+'<div class="help" style="margin-top:10px">Os departamentos entram na lista automaticamente quando você os usa em um registro.</div>';}
-$("peopleList").onclick=async e=>{const b=e.target.closest("[data-off]");if(!b||!admin)return;const p=people.find(x=>x.id===b.dataset.off);if(p&&confirm(`Desativar ${p.name}?`)){await updateDoc(D("responsibles",p.id),{active:false});await loadAll()}};
+$("peopleList").onclick=async e=>{const b=e.target.closest("[data-off]");if(!b||!admin)return;const p=people.find(x=>x.id===b.dataset.off);if(p&&confirm(`Desativar ${p.name}?`)){try{await updateDoc(D("responsibles",p.id),{active:false});p.active=false;refreshUI()}catch(err){toast("Erro ao desativar: "+err.message)}}};
+
+/* contas (boss+): quem entra no sistema e com qual nível. Só admin-non-removable fica de fora: é mexido no Firebase. */
+const ROLES=[["user","Usuário"],["admin","Admin"],["boss","Boss"]],myMail=()=>user.email.toLowerCase();
+ROLES.forEach(([v,l])=>$("accRole").add(new Option(l,v)));
+async function loadAccounts(force){if(!boss)return;if(!accounts||force){try{const s=await rdocs(C("allowlist"));accounts=s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){toast("Erro ao carregar contas: "+e.message);return}}renderAccounts()}
+function renderAccounts(){
+  if(!boss||!accounts)return;const me=myMail();
+  accounts.sort((a,b)=>(LV[b.role]||1)-(LV[a.role]||1)||(a.name||a.id).localeCompare(b.name||b.id,"pt-BR"));
+  $("accCount").textContent=`(${accounts.length})`;
+  $("accRows").innerHTML=accounts.map(a=>{
+    const r=LV[a.role]?a.role:"user",self=a.id===me,fixed=r==="admin-non-removable",on=a.active===true,e=esc(a.id),lock=fixed||self,nb=`<button class="btn ghost sm" data-acc-name="${e}" aria-label="Editar nome de ${e}"><svg class="i"><use href="#i-edit"/></svg>Nome</button>`;
+    return `<tr><td><div class="t1">${esc(a.name||a.id)}${self?' <span class="tag">você</span>':""}</div>${a.name?`<div class="t2">${e}</div>`:""}</td>`
+     +`<td>${lock?`<span class="tag">${RL[r]}</span>`:`<select data-acc-role="${e}" aria-label="Nível de ${e}">${ROLES.map(([v,l])=>`<option value="${v}"${v===r?" selected":""}>${l}</option>`).join("")}</select>`}</td>`
+     +`<td>${on?"Ativa":'<span class="tag off">Inativa</span>'}</td>`
+     +`<td class="td-act">${lock?(fixed&&!self?'<span class="small muted">só pelo Firebase</span>':`<div class="row-act">${nb}</div>`):`<div class="row-act">${nb}<button class="btn ghost sm" data-acc-toggle="${e}">${on?"Desativar":"Ativar"}</button><button class="btn dg sm" data-acc-del="${e}" aria-label="Remover ${e}"><svg class="i"><use href="#i-trash"/></svg></button></div>`}</td></tr>`
+  }).join("")||'<tr><td colspan="4" class="empty">Nenhuma conta cadastrada.</td></tr>';
+}
+/* o documento sempre é gravado completo (role + active), como as regras exigem */
+async function saveAccount(id,patch,msg){
+  const a=accounts.find(x=>x.id===id);if(!boss||!a||a.role==="admin-non-removable"||id===myMail())return;
+  const full={role:LV[a.role]?a.role:"user",active:a.active===true,...patch};
+  try{await updateDoc(D("allowlist",id),{...full,updatedAt:serverTimestamp(),updatedBy:user.email});Object.assign(a,full);toast(msg)}catch(e){toast("Erro ao salvar: "+e.message)}
+  renderAccounts();
+}
+/* nome de exibição: boss+ edita o de qualquer conta (menos admin-non-removable de outra pessoa) e o próprio */
+async function saveName(a,name){
+  const self=a.id===myMail(),upd={updatedAt:serverTimestamp(),updatedBy:user.email};
+  try{
+    if(self)await updateDoc(D("allowlist",a.id),{name,...upd});
+    else await updateDoc(D("allowlist",a.id),{role:LV[a.role]?a.role:"user",active:a.active===true,name,...upd});
+    a.name=name;if(self)setProfile(a);toast("Nome atualizado.")
+  }catch(e){toast("Erro ao salvar: "+e.message)}
+  renderAccounts();
+}
+$("accRows").onchange=e=>{const s=e.target.closest("[data-acc-role]");if(s)saveAccount(s.dataset.accRole,{role:s.value},"Nível atualizado.")};
+$("accRows").onclick=async e=>{
+  const t=e.target.closest("button");if(!t||!boss)return;const a=accounts.find(x=>x.id===(t.dataset.accToggle||t.dataset.accDel||t.dataset.accName));if(!a)return;
+  if(t.dataset.accName){const v=prompt(`Nome de ${a.id} (aparece no menu e nas listas)`,a.name||"");if(v!==null)saveName(a,clean(v).slice(0,80));return}
+  if(t.dataset.accToggle)saveAccount(a.id,{active:a.active!==true},a.active===true?"Conta desativada.":"Conta ativada.");
+  else if(confirm(`Remover o acesso de ${a.name||a.id}?`)){try{await deleteDoc(D("allowlist",a.id));accounts=accounts.filter(x=>x!==a);toast("Conta removida.")}catch(err){toast("Erro ao remover: "+err.message)}renderAccounts()}
+};
+$("accAdd").onclick=async()=>{
+  if(!boss)return;if(!accounts){toast("Carregue a lista de contas primeiro.");return}
+  const mail=$("accEmail").value.trim().toLowerCase(),name=clean($("accName").value),r=$("accRole").value;
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){toast("Digite um e-mail válido.");return}
+  if(accounts.some(a=>a.id===mail)){toast("Esse e-mail já está cadastrado.");return}
+  const base={role:r,active:true,...(name?{name}:{})};
+  try{await setDoc(D("allowlist",mail),{...base,createdAt:serverTimestamp(),createdBy:user.email,updatedAt:serverTimestamp(),updatedBy:user.email});accounts.push({id:mail,...base});$("accEmail").value=$("accName").value="";toast("Conta adicionada.");renderAccounts()}catch(e){toast("Erro ao adicionar: "+e.message)}
+};
+$("accReload").onclick=()=>loadAccounts(true);
 </script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </body>
 </html>
