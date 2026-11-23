@@ -245,7 +245,7 @@ const $=id=>document.getElementById(id),C=n=>collection(db,n),D=(c,id)=>doc(db,c
 const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const SEM_DATA="0001-01-01",fmt=d=>d===SEM_DATA?"sem data":d?d.split("-").reverse().join("/"):"—",today=()=>new Date().toLocaleDateString("en-CA"),byName=(a,b)=>a.localeCompare(b,"pt-BR");
 /* níveis de conta (campo role em allowlist/{email}); o que vale é o número do nível */
-const LV={user:1,manager:2,admin:3,"admin-non-removable":4,boss:3},RL={user:"Usuário",manager:"Manager",admin:"Admin","admin-non-removable":"Admin fixo"},RK=r=>r==="boss"?"admin":LV[r]?r:"user"; /* "boss" é o nome antigo do admin */
+const LV={user:1,manager:2,admin:3,"admin-non-removable":4,boss:3},RL={user:"Usuário",manager:"Gerente",admin:"Administrador","admin-non-removable":"Administrador-NR"},RK=r=>r==="boss"?"admin":LV[r]?r:"user"; /* "boss" é o nome antigo do admin */
 const ROLES=[["user","Usuário"],["manager","Manager"],["admin","Admin"]];
 let user=null,role="user",admin=false,mgr=false,demands=[],people=[],rawPeople=[],depts=[],accounts=null;
 function toast(s){let el=document.createElement("div");el.className="toast";el.textContent=s;document.body.append(el);setTimeout(()=>el.remove(),3800)}
