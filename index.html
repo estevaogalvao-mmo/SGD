@@ -193,7 +193,7 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
   <div class="tw" style="margin-top:16px"><table style="min-width:0"><thead><tr><th>Coleção</th><th>Documentos</th><th>Tamanho estimado</th></tr></thead><tbody id="stRows"></tbody></table></div>
   <div class="help" style="margin-top:12px">Valor estimado a partir dos dados carregados, incluindo uma margem para índices.</div></div>
  <div class="panel"><div class="p-head"><h2>Leituras do banco</h2></div>
-  <div class="big" id="rdToday">0</div><div class="small muted">leituras feitas por este aparelho hoje (estimativa). O plano gratuito permite 50 mil por dia, somando todos os aparelhos. O dia vira à meia-noite do horário do Pacífico (04h ou 05h em Brasília).</div>
+  <div class="big" id="rdToday">0</div><div class="small muted">leituras feitas por este aparelho hoje (estimativa).</div>
   <div class="small muted" id="rdSync" style="margin-top:8px"></div>
   <div class="exp" style="margin-top:14px"><button class="btn sec" id="fullReload"><svg class="i"><use href="#i-refresh"/></svg>Recarregar tudo do servidor</button></div>
   <div class="help" style="margin-top:12px">Normalmente não é preciso: o sistema guarda os registros neste aparelho e busca só o que mudou. Recarregar tudo lê todos os registros de novo.</div></div>
@@ -544,4 +544,5 @@ $("accReload").onclick=()=>loadAccounts(true);
 </script>
 </body>
 </html>
+
 
