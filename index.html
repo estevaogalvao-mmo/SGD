@@ -350,10 +350,7 @@ function startLists(){
   });
   return Promise.all([sub("responsibles",a=>{rawPeople=a}),sub("departments",a=>{depts=a})]).catch(e=>{unsubs.forEach(f=>{try{f()}catch(_){}});unsubs=[];throw e});
 }
-/* saudação "Olá, <nome cadastrado em Contas>!" no topo de Registrar demanda (sem nome cadastrado, usa o da conta Google).
-   O rodapé do menu continua mostrando a conta Google, para identificar a conta mesmo quando há nomes iguais. */
-function setProfile(d){const nm=(d&&typeof d.name==="string"&&d.name.trim())||"";$("hello").textContent="Olá, "+(nm||user.displayName||user.email.split("@")[0]);const el=$("profileName");el.textContent=user.displayName||user.email;el.title=user.email}
-function applyRole(r){
+function setProfile(d){const nm=(d&&typeof d.name==="string"&&d.name.trim())||"";$("hello").textContent="Olá, "+(nm||user.displayName||user.email.split("@")[0])+"!";const el=$("profileName");el.textContent=user.displayName||user.email;el.title=user.email}function applyRole(r){
   role=r;admin=LV[r]>=2;boss=LV[r]>=3;$("profileRole").textContent=RL[r];
   document.querySelectorAll(".admin-only").forEach(b=>b.classList.toggle("hidden",!admin));
   document.querySelectorAll(".boss-only").forEach(b=>b.classList.toggle("hidden",!boss));
@@ -547,3 +544,4 @@ $("accReload").onclick=()=>loadAccounts(true);
 </script>
 </body>
 </html>
+
