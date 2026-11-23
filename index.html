@@ -149,7 +149,7 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
   <button data-view="dashboardView"><svg class="i"><use href="#i-grid"/></svg>Painel e registros</button>
   <button id="adminNav" class="admin-only hidden" data-view="adminView"><svg class="i"><use href="#i-gear"/></svg>Administração</button>
   <button class="admin-only hidden" data-view="storageView"><svg class="i"><use href="#i-db"/></svg>Armazenamento</button>
-  <button class="boss-only hidden" data-view="accountsView"><svg class="i"><use href="#i-users"/></svg>Contas</button>
+  <button class="mgr-only hidden" data-view="accountsView"><svg class="i"><use href="#i-users"/></svg>Contas</button>
  </nav>
  <div class="me">
   <div class="who"><img id="profilePhoto" src="" alt=""><div><span id="profileName"></span><small id="profileRole"></small></div></div>
@@ -211,7 +211,7 @@ th{background:var(--s2);color:var(--mut);font-size:12.5px;font-weight:600;white-
   <div class="help">A pessoa entra com a conta Google deste e-mail.</div></div>
  <div class="panel"><div class="p-head"><h2>Contas com acesso <span id="accCount" class="muted small"></span></h2><button class="btn ghost sm" id="accReload"><svg class="i"><use href="#i-refresh"/></svg>Atualizar</button></div>
   <div class="tw"><table style="min-width:0"><thead><tr><th>Conta</th><th>Nível</th><th>Situação</th><th class="th-act"></th></tr></thead><tbody id="accRows"></tbody></table></div>
-  <div class="help" style="margin-top:12px"><b>Usuário</b> registra e edita demandas. <b>Admin</b> também gerencia responsáveis, apaga demandas e usa Armazenamento. <b>Boss</b> também gerencia contas. <b>Admin fixo</b> é um boss que só pode ser criado, alterado ou removido direto no Firebase.</div></div>
+  <div class="help" style="margin-top:12px"><b>Usuário</b> registra, edita e apaga demandas. <b>Manager</b> também adiciona e gerencia contas de usuário e manager. <b>Admin</b> também apaga demandas em lote (Armazenamento), gerencia responsáveis e registra contas de qualquer nível. <b>Admin fixo</b> é um admin que só pode ser criado, alterado ou removido direto no Firebase.</div></div>
 </section>
 </main></div>
 
@@ -245,8 +245,9 @@ const $=id=>document.getElementById(id),C=n=>collection(db,n),D=(c,id)=>doc(db,c
 const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const SEM_DATA="0001-01-01",fmt=d=>d===SEM_DATA?"sem data":d?d.split("-").reverse().join("/"):"—",today=()=>new Date().toLocaleDateString("en-CA"),byName=(a,b)=>a.localeCompare(b,"pt-BR");
 /* níveis de conta (campo role em allowlist/{email}); o que vale é o número do nível */
-const LV={user:1,admin:2,boss:3,"admin-non-removable":4},RL={user:"Usuário",admin:"Admin",boss:"Boss","admin-non-removable":"Admin fixo"};
-let user=null,role="user",admin=false,boss=false,demands=[],people=[],rawPeople=[],depts=[],accounts=null;
+const LV={user:1,manager:2,admin:3,"admin-non-removable":4,boss:3},RL={user:"Usuário",manager:"Manager",admin:"Admin","admin-non-removable":"Admin fixo"},RK=r=>r==="boss"?"admin":LV[r]?r:"user"; /* "boss" é o nome antigo do admin */
+const ROLES=[["user","Usuário"],["manager","Manager"],["admin","Admin"]];
+let user=null,role="user",admin=false,mgr=false,demands=[],people=[],rawPeople=[],depts=[],accounts=null;
 function toast(s){let el=document.createElement("div");el.className="toast";el.textContent=s;document.body.append(el);setTimeout(()=>el.remove(),3800)}
 
 /* logo do menu: tenta outras extensões se o .png não existir */
@@ -261,7 +262,7 @@ document.querySelectorAll(".theme-btn").forEach(b=>b.onclick=()=>setTheme(root.d
 $("date").value=today();
 $("googleLogin").onclick=async()=>{try{$("loginMessage").textContent="";await signInWithPopup(auth,provider)}catch(e){$("loginMessage").textContent="Não foi possível entrar: "+e.message}};
 $("logout").onclick=async()=>{await cacheDel();signOut(auth)};
-onAuthStateChanged(auth,async u=>{if(!u){stopLive();user=null;role="user";admin=boss=false;accounts=null;loaded=false;dmap.clear();demands=[];rawPeople=[];depts=[];people=[];root.dataset.theme="light";$("loginView").classList.remove("hidden");$("mainView").classList.add("hidden");return}user=u;try{let allow=await getDoc(D("allowlist",u.email.toLowerCase()));countReads(1);if(!allow.exists()||allow.data().active!==true){await signOut(auth);$("loginMessage").textContent="Este e-mail não está autorizado. Solicite acesso ao administrador.";return}root.dataset.theme=pref;$("loginView").classList.add("hidden");$("mainView").classList.remove("hidden");setProfile(allow.data());$("profilePhoto").src=u.photoURL||"";accessAt=Date.now();applyRole(LV[allow.data().role]?allow.data().role:"user");showView("newView");await loadAll()}catch(e){toast("Não foi possível verificar o acesso: "+e.message);await signOut(auth)}});
+onAuthStateChanged(auth,async u=>{if(!u){stopLive();user=null;role="user";admin=mgr=false;accounts=null;loaded=false;dmap.clear();demands=[];rawPeople=[];depts=[];people=[];root.dataset.theme="light";$("loginView").classList.remove("hidden");$("mainView").classList.add("hidden");return}user=u;try{let allow=await getDoc(D("allowlist",u.email.toLowerCase()));countReads(1);if(!allow.exists()||allow.data().active!==true){await signOut(auth);$("loginMessage").textContent="Este e-mail não está autorizado. Solicite acesso ao administrador.";return}root.dataset.theme=pref;$("loginView").classList.add("hidden");$("mainView").classList.remove("hidden");setProfile(allow.data());$("profilePhoto").src=u.photoURL||"";accessAt=Date.now();applyRole(RK(allow.data().role));showView("newView");await loadAll()}catch(e){toast("Não foi possível verificar o acesso: "+e.message);await signOut(auth)}});
 
 /* dados */
 /* ===== leitura eficiente =====
@@ -351,12 +352,12 @@ function startLists(){
   return Promise.all([sub("responsibles",a=>{rawPeople=a}),sub("departments",a=>{depts=a})]).catch(e=>{unsubs.forEach(f=>{try{f()}catch(_){}});unsubs=[];throw e});
 }
 function setProfile(d){const nm=(d&&typeof d.name==="string"&&d.name.trim())||"";$("hello").textContent="Olá, "+(nm||user.displayName||user.email.split("@")[0])+"!";const el=$("profileName");el.textContent=user.displayName||user.email;el.title=user.email}function applyRole(r){
-  role=r;admin=LV[r]>=2;boss=LV[r]>=3;$("profileRole").textContent=RL[r];
+  role=r;admin=LV[r]>=3;mgr=LV[r]>=2;$("profileRole").textContent=RL[r];fillRoles();
   document.querySelectorAll(".admin-only").forEach(b=>b.classList.toggle("hidden",!admin));
-  document.querySelectorAll(".boss-only").forEach(b=>b.classList.toggle("hidden",!boss));
-  if(!boss)accounts=null;
+  document.querySelectorAll(".mgr-only").forEach(b=>b.classList.toggle("hidden",!mgr));
+  if(!mgr)accounts=null;
   const v=document.querySelector(".view:not(.hidden)");
-  if(v&&((!admin&&(v.id==="adminView"||v.id==="storageView"))||(!boss&&v.id==="accountsView")))showView("newView");
+  if(v&&((!admin&&(v.id==="adminView"||v.id==="storageView"))||(!mgr&&v.id==="accountsView")))showView("newView");
 }
 async function endSession(msg){await cacheDel();try{await signOut(auth)}catch(e){}$("loginMessage").textContent=msg}
 async function recheckAccess(){
@@ -365,7 +366,7 @@ async function recheckAccess(){
     const s=await getDoc(D("allowlist",user.email.toLowerCase()));countReads(1);
     if(!s.exists()||s.data().active!==true){await endSession("Seu acesso foi removido ou desativado pela administração.");return}
     setProfile(s.data());
-    const r=LV[s.data().role]?s.data().role:"user";
+    const r=RK(s.data().role);
     if(r!==role){applyRole(r);refreshUI();toast("Seu nível de acesso agora é: "+RL[r]+".")}
   }catch(e){/* sem rede agora: tenta de novo no próximo ciclo */}
 }
@@ -410,9 +411,9 @@ const FIL=["search","filterResponsible","filterDept","filterFrom","filterTo"];
 function getFiltered(){let s=norm($("search").value),p=$("filterResponsible").value,d=$("filterDept").value,f=$("filterFrom").value,t=$("filterTo").value;return demands.filter(x=>(!s||norm(x.name+" "+x.detail).includes(s))&&(!p||x.responsible===p)&&(!d||x.department===d)&&(!f||x.date>=f)&&(!t||(x.date<=t&&x.date!==SEM_DATA)))}
 FIL.forEach(id=>$(id).addEventListener("input",renderTable));
 $("clearFilters").onclick=()=>{FIL.forEach(id=>$(id).value="");renderTable()};
-function renderTable(){let list=getFiltered();$("tableBody").innerHTML=list.length?list.map(x=>`<tr><td class="nw">${fmt(x.date)}</td><td><div class="t1">${esc(x.name)}</div>${x.detail?`<div class="t2">${esc(x.detail)}</div>`:""}</td><td>${esc(x.responsible)||"—"}</td><td>${x.department?`<span class="tag">${esc(x.department)}</span>`:"—"}</td><td class="td-act"><div class="row-act"><button class="btn ghost sm" data-edit="${x.id}"><svg class="i"><use href="#i-edit"/></svg>Editar</button>${admin?`<button class="btn dg sm" data-del="${x.id}" aria-label="Excluir"><svg class="i"><use href="#i-trash"/></svg></button>`:""}</div></td></tr>`).join(""):'<tr><td colspan="5" class="empty">Nenhuma demanda encontrada. Ajuste os filtros ou registre uma nova demanda.</td></tr>';renderCount(list)}
+function renderTable(){let list=getFiltered();$("tableBody").innerHTML=list.length?list.map(x=>`<tr><td class="nw">${fmt(x.date)}</td><td><div class="t1">${esc(x.name)}</div>${x.detail?`<div class="t2">${esc(x.detail)}</div>`:""}</td><td>${esc(x.responsible)||"—"}</td><td>${x.department?`<span class="tag">${esc(x.department)}</span>`:"—"}</td><td class="td-act"><div class="row-act"><button class="btn ghost sm" data-edit="${x.id}"><svg class="i"><use href="#i-edit"/></svg>Editar</button><button class="btn dg sm" data-del="${x.id}" aria-label="Excluir"><svg class="i"><use href="#i-trash"/></svg></button></div></td></tr>`).join(""):'<tr><td colspan="5" class="empty">Nenhuma demanda encontrada. Ajuste os filtros ou registre uma nova demanda.</td></tr>';renderCount(list)}
 function renderCount(list=getFiltered()){$("countLabel").textContent=`${list.length} de ${demands.length} registro(s)`+(syncFail?" · não foi possível atualizar, tentando de novo":syncedAt?` · atualizado às ${new Date(syncedAt).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`:"")}
-$("tableBody").onclick=async e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.edit){openEdit(demands.find(x=>x.id===b.dataset.edit))}else if(b.dataset.del&&admin){const x=demands.find(d=>d.id===b.dataset.del);if(x&&confirm("Excluir este registro?")){try{await removeDemands([x.id]);toast("Registro excluído.")}catch(err){toast("Erro ao excluir: "+err.message)}refreshUI()}}};
+$("tableBody").onclick=async e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.edit){openEdit(demands.find(x=>x.id===b.dataset.edit))}else if(b.dataset.del){const x=demands.find(d=>d.id===b.dataset.del);if(x&&confirm("Excluir este registro?")){try{await removeDemands([x.id]);toast("Registro excluído.")}catch(err){toast("Erro ao excluir: "+err.message)}refreshUI()}}};
 
 /* edição */
 const withTimeout=(p,t)=>Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error("timeout")),t))]);
@@ -492,49 +493,51 @@ $("addPerson").onclick=async()=>{if(!admin)return;let name=clean($("newPerson").
 function renderAdmin(){if(!admin)return;$("peopleList").innerHTML=people.map(p=>`<div class="admin-row"><span>${esc(p.name)}</span><button class="btn dg sm" data-off="${p.id}">Desativar</button></div>`).join("")||'<div class="empty">Nenhum responsável cadastrado.</div>';$("deptAdminList").innerHTML=deptNames().map(n=>`<div class="admin-row"><span>${esc(n)}</span></div>`).join("")+'<div class="help" style="margin-top:10px">Os departamentos entram na lista automaticamente quando você os usa em um registro.</div>';}
 $("peopleList").onclick=async e=>{const b=e.target.closest("[data-off]");if(!b||!admin)return;const p=people.find(x=>x.id===b.dataset.off);if(p&&confirm(`Desativar ${p.name}?`)){try{await updateDoc(D("responsibles",p.id),{active:false});p.active=false;refreshUI()}catch(err){toast("Erro ao desativar: "+err.message)}}};
 
-/* contas (boss+): quem entra no sistema e com qual nível. Só admin-non-removable fica de fora: é mexido no Firebase. */
-const ROLES=[["user","Usuário"],["admin","Admin"],["boss","Boss"]],myMail=()=>user.email.toLowerCase();
-ROLES.forEach(([v,l])=>$("accRole").add(new Option(l,v)));
-async function loadAccounts(force){if(!boss)return;if(!accounts||force){try{const s=await rdocs(C("allowlist"));accounts=s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){toast("Erro ao carregar contas: "+e.message);return}}renderAccounts()}
+/* contas (manager+): quem entra no sistema e com qual nível.
+   Manager mexe em contas user e manager; admin também mexe em contas admin. Admin fixo só é mexido no Firebase. */
+const myMail=()=>user.email.toLowerCase(),reach=()=>admin?3:2,rolesFor=()=>ROLES.slice(0,admin?3:2);
+function fillRoles(){const s=$("accRole");s.innerHTML="";rolesFor().forEach(([v,l])=>s.add(new Option(l,v)))}
+async function loadAccounts(force){if(!mgr)return;if(!accounts||force){try{const s=await rdocs(C("allowlist"));accounts=s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){toast("Erro ao carregar contas: "+e.message);return}}renderAccounts()}
 function renderAccounts(){
-  if(!boss||!accounts)return;const me=myMail();
-  accounts.sort((a,b)=>(LV[b.role]||1)-(LV[a.role]||1)||(a.name||a.id).localeCompare(b.name||b.id,"pt-BR"));
+  if(!mgr||!accounts)return;const me=myMail();
+  accounts.sort((a,b)=>LV[RK(b.role)]-LV[RK(a.role)]||(a.name||a.id).localeCompare(b.name||b.id,"pt-BR"));
   $("accCount").textContent=`(${accounts.length})`;
   $("accRows").innerHTML=accounts.map(a=>{
-    const r=LV[a.role]?a.role:"user",self=a.id===me,fixed=r==="admin-non-removable",on=a.active===true,e=esc(a.id),lock=fixed||self,nb=`<button class="btn ghost sm" data-acc-name="${e}" aria-label="Editar nome de ${e}"><svg class="i"><use href="#i-edit"/></svg>Nome</button>`;
+    const r=RK(a.role),self=a.id===me,fixed=r==="admin-non-removable",on=a.active===true,e=esc(a.id),lock=self||LV[r]>reach(),nb=`<button class="btn ghost sm" data-acc-name="${e}" aria-label="Editar nome de ${e}"><svg class="i"><use href="#i-edit"/></svg>Nome</button>`;
     return `<tr><td><div class="t1">${esc(a.name||a.id)}${self?' <span class="tag">você</span>':""}</div>${a.name?`<div class="t2">${e}</div>`:""}</td>`
-     +`<td>${lock?`<span class="tag">${RL[r]}</span>`:`<select data-acc-role="${e}" aria-label="Nível de ${e}">${ROLES.map(([v,l])=>`<option value="${v}"${v===r?" selected":""}>${l}</option>`).join("")}</select>`}</td>`
+     +`<td>${lock?`<span class="tag">${RL[r]}</span>`:`<select data-acc-role="${e}" aria-label="Nível de ${e}">${rolesFor().map(([v,l])=>`<option value="${v}"${v===r?" selected":""}>${l}</option>`).join("")}</select>`}</td>`
      +`<td>${on?"Ativa":'<span class="tag off">Inativa</span>'}</td>`
-     +`<td class="td-act">${lock?(fixed&&!self?'<span class="small muted">só pelo Firebase</span>':`<div class="row-act">${nb}</div>`):`<div class="row-act">${nb}<button class="btn ghost sm" data-acc-toggle="${e}">${on?"Desativar":"Ativar"}</button><button class="btn dg sm" data-acc-del="${e}" aria-label="Remover ${e}"><svg class="i"><use href="#i-trash"/></svg></button></div>`}</td></tr>`
+     +`<td class="td-act">${lock?(self?`<div class="row-act">${nb}</div>`:`<span class="small muted">${fixed?"só pelo Firebase":"só admin altera"}</span>`):`<div class="row-act">${nb}<button class="btn ghost sm" data-acc-toggle="${e}">${on?"Desativar":"Ativar"}</button><button class="btn dg sm" data-acc-del="${e}" aria-label="Remover ${e}"><svg class="i"><use href="#i-trash"/></svg></button></div>`}</td></tr>`
   }).join("")||'<tr><td colspan="4" class="empty">Nenhuma conta cadastrada.</td></tr>';
 }
 /* o documento sempre é gravado completo (role + active), como as regras exigem */
 async function saveAccount(id,patch,msg){
-  const a=accounts.find(x=>x.id===id);if(!boss||!a||a.role==="admin-non-removable"||id===myMail())return;
-  const full={role:LV[a.role]?a.role:"user",active:a.active===true,...patch};
+  const a=accounts.find(x=>x.id===id);if(!mgr||!a||LV[RK(a.role)]>reach()||id===myMail())return;
+  const full={role:RK(a.role),active:a.active===true,...patch};
   try{await updateDoc(D("allowlist",id),{...full,updatedAt:serverTimestamp(),updatedBy:user.email});Object.assign(a,full);toast(msg)}catch(e){toast("Erro ao salvar: "+e.message)}
   renderAccounts();
 }
-/* nome de exibição: boss+ edita o de qualquer conta (menos admin-non-removable de outra pessoa) e o próprio */
+/* nome de exibição: manager+ edita o das contas ao seu alcance e o próprio */
 async function saveName(a,name){
   const self=a.id===myMail(),upd={updatedAt:serverTimestamp(),updatedBy:user.email};
   try{
     if(self)await updateDoc(D("allowlist",a.id),{name,...upd});
-    else await updateDoc(D("allowlist",a.id),{role:LV[a.role]?a.role:"user",active:a.active===true,name,...upd});
+    else await updateDoc(D("allowlist",a.id),{role:RK(a.role),active:a.active===true,name,...upd});
     a.name=name;if(self)setProfile(a);toast("Nome atualizado.")
   }catch(e){toast("Erro ao salvar: "+e.message)}
   renderAccounts();
 }
 $("accRows").onchange=e=>{const s=e.target.closest("[data-acc-role]");if(s)saveAccount(s.dataset.accRole,{role:s.value},"Nível atualizado.")};
 $("accRows").onclick=async e=>{
-  const t=e.target.closest("button");if(!t||!boss)return;const a=accounts.find(x=>x.id===(t.dataset.accToggle||t.dataset.accDel||t.dataset.accName));if(!a)return;
+  const t=e.target.closest("button");if(!t||!mgr)return;const a=accounts.find(x=>x.id===(t.dataset.accToggle||t.dataset.accDel||t.dataset.accName));if(!a)return;
   if(t.dataset.accName){const v=prompt(`Nome de ${a.id} (aparece no menu e nas listas)`,a.name||"");if(v!==null)saveName(a,clean(v).slice(0,80));return}
   if(t.dataset.accToggle)saveAccount(a.id,{active:a.active!==true},a.active===true?"Conta desativada.":"Conta ativada.");
   else if(confirm(`Remover o acesso de ${a.name||a.id}?`)){try{await deleteDoc(D("allowlist",a.id));accounts=accounts.filter(x=>x!==a);toast("Conta removida.")}catch(err){toast("Erro ao remover: "+err.message)}renderAccounts()}
 };
 $("accAdd").onclick=async()=>{
-  if(!boss)return;if(!accounts){toast("Carregue a lista de contas primeiro.");return}
+  if(!mgr)return;if(!accounts){toast("Carregue a lista de contas primeiro.");return}
   const mail=$("accEmail").value.trim().toLowerCase(),name=clean($("accName").value),r=$("accRole").value;
+  if(!rolesFor().some(([v])=>v===r))return;
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){toast("Digite um e-mail válido.");return}
   if(accounts.some(a=>a.id===mail)){toast("Esse e-mail já está cadastrado.");return}
   const base={role:r,active:true,...(name?{name}:{})};
@@ -544,3 +547,4 @@ $("accReload").onclick=()=>loadAccounts(true);
 </script>
 </body>
 </html>
+
