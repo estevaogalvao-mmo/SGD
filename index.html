@@ -507,7 +507,7 @@ function renderAccounts(){
     return `<tr><td><div class="t1">${esc(a.name||a.id)}${self?' <span class="tag">você</span>':""}</div>${a.name?`<div class="t2">${e}</div>`:""}</td>`
      +`<td>${lock?`<span class="tag">${RL[r]}</span>`:`<select data-acc-role="${e}" aria-label="Nível de ${e}">${rolesFor().map(([v,l])=>`<option value="${v}"${v===r?" selected":""}>${l}</option>`).join("")}</select>`}</td>`
      +`<td>${on?"Ativa":'<span class="tag off">Inativa</span>'}</td>`
-     +`<td class="td-act">${lock?(self?`<div class="row-act">${nb}</div>`:`<span class="small muted">${fixed?"só pelo Firebase":"só admin altera"}</span>`):`<div class="row-act">${nb}<button class="btn ghost sm" data-acc-toggle="${e}">${on?"Desativar":"Ativar"}</button><button class="btn dg sm" data-acc-del="${e}" aria-label="Remover ${e}"><svg class="i"><use href="#i-trash"/></svg></button></div>`}</td></tr>`
+     +`<td class="td-act">${lock?(self?`<div class="row-act">${nb}</div>`:`<span class="small muted">${fixed?"Administrador do sistema":"só admin altera"}</span>`):`<div class="row-act">${nb}<button class="btn ghost sm" data-acc-toggle="${e}">${on?"Desativar":"Ativar"}</button><button class="btn dg sm" data-acc-del="${e}" aria-label="Remover ${e}"><svg class="i"><use href="#i-trash"/></svg></button></div>`}</td></tr>`
   }).join("")||'<tr><td colspan="4" class="empty">Nenhuma conta cadastrada.</td></tr>';
 }
 /* o documento sempre é gravado completo (role + active), como as regras exigem */
